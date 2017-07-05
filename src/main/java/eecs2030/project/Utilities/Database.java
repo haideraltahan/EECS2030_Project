@@ -3,12 +3,12 @@ package eecs2030.project.Utilities;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseCredentials;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 import eecs2030.project.Models.Score;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.HashMap;
 
 /**
  * Created by Haider on 7/5/2017.
@@ -18,7 +18,7 @@ import java.io.FileInputStream;
 public final class Database{
 
     private FirebaseDatabase database;
-    private DatabaseReference ref;
+    private DatabaseReference databaseRef;
 
     public Database() throws Exception {
         File file = new File("src\\main\\resources\\service-account.json");
@@ -32,10 +32,42 @@ public final class Database{
         FirebaseApp.initializeApp(options);
 
         this.database = FirebaseDatabase.getInstance();
-        this.ref = this.database.getReference("Scores");
+        this.databaseRef = this.database.getReference("Scores");
+
+        this.databaseRef.orderByChild("points").limitToFirst(10).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                Score.updateInstance(dataSnapshot.getKey() , Integer.parseInt(dataSnapshot.getValue().toString()));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot snapshot, String previousChildName) {
+                Score.updateInstance(snapshot.getKey() , Integer.parseInt(snapshot.getValue().toString()));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+                Score.removeInstance(snapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot snapshot, String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
     }
 
-    public void addScore(Score score){
-        this.ref.push().setValue(score);
+    public void updateScore(String name, int points){
+        Score.updateInstance(name, points);
+        this.databaseRef.updateChildren(new HashMap<>(Score.getInstances()));
+    }
+
+    public DatabaseReference getDatabaseRef() {
+        return this.databaseRef;
     }
 }

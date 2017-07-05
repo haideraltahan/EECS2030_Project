@@ -6,21 +6,26 @@ import java.util.Map;
 /**
  * Created by Haider on 7/4/2017.
  */
-public class Score {
+public final class Score {
+    private static final Map<String, Integer> instances = new HashMap<>();
 
-    private int points;
-    private String name;
-
-    public Score(int points, String name) {
-        this.points = points;
-        this.name = name;
+    public static void updateInstance(String name, int points) {
+        String key = name;
+        Integer point = instances.get(key);
+        if (point == null || point < points) {
+            point = points;
+            instances.put(key, point);
+        }
     }
 
-    public int getPoints() {
-        return this.points;
+    public static void removeInstance(String key) {
+        Integer point = instances.get(key);
+        if (point != null) {
+            instances.remove(key);
+        }
     }
 
-    public String getName() {
-        return this.name;
+    public static Map<String, Integer> getInstances() {
+        return instances;
     }
 }
