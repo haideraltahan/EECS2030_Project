@@ -10,4 +10,8 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile ('com.google.firebase:firebase-admin:5.2.0') {
+        exclude group: 'com.google.guava'
+    }
+    compile 'com.google.guava:guava:21.0'
 }
