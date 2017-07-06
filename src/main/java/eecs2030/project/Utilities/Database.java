@@ -21,50 +21,22 @@ public final class Database{
     private DatabaseReference databaseRef;
 
     public Database() throws Exception {
-        File file = new File("src\\main\\resources\\service-account.json");
+        File file = new File(this.getClass().getResource(Constants.FIREBASE_FILE_PATH).getPath());
         FileInputStream serviceAccount = new FileInputStream(file);
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredential(FirebaseCredentials.fromCertificate(serviceAccount))
-                .setDatabaseUrl("https://snakegame-2a153.firebaseio.com/")
+                .setDatabaseUrl(Constants.FIREBASE_LINK)
                 .build();
 
         FirebaseApp.initializeApp(options);
 
         this.database = FirebaseDatabase.getInstance();
         this.databaseRef = this.database.getReference("Scores");
-
-        this.databaseRef.orderByChild("points").limitToFirst(10).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                Score.updateInstance(dataSnapshot.getKey() , Integer.parseInt(dataSnapshot.getValue().toString()));
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot snapshot, String previousChildName) {
-                Score.updateInstance(snapshot.getKey() , Integer.parseInt(snapshot.getValue().toString()));
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot snapshot) {
-                Score.removeInstance(snapshot.getKey());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot snapshot, String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-
-            }
-        });
     }
 
-    public void updateScore(String name, int points){
-        Score.updateInstance(name, points);
-        this.databaseRef.updateChildren(new HashMap<>(Score.getInstances()));
+    public void addScore(Score score){
+        this.databaseRef.push().setValue(score);
     }
 
     public DatabaseReference getDatabaseRef() {
