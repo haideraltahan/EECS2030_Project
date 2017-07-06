@@ -14,6 +14,8 @@ public final class Constants {
     public static final String VERSION = "v0.0.1";
     public static final String FIREBASE_FILE_PATH = "service-account.json";
     public static final String FIREBASE_LINK = "https://snakegame-2a153.firebaseio.com/";
+    public static final String DATABASE_MAIN_OBJECT = "Scores";
+    public static final String DATABASE_ERROR_OBJECT = "Error";
 
     public static final int HEIGHT = 600;
     public static final int WIDTH = 600;

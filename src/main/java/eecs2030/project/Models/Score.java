@@ -1,8 +1,5 @@
 package eecs2030.project.Models;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Haider on 7/4/2017.
  */
@@ -29,11 +26,6 @@ public final class Score implements Comparable<Score> {
     public int getPoints() {
         return new Integer(this.points);
     }
-
-    public Object[] toArrayString() {
-        return new Object[]{ name, points};
-    }
-
 
     @Override
     public int compareTo(Score score) {

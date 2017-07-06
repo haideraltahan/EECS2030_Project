@@ -4,21 +4,14 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import eecs2030.project.Models.Score;
 import eecs2030.project.Models.TableModel;
 import eecs2030.project.Utilities.Constants;
 import eecs2030.project.Utilities.Database;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 
 
 /**
@@ -69,7 +62,7 @@ public class Window extends JFrame implements ActionListener {
 
             @Override
             public void onChildChanged(DataSnapshot snapshot, String previousChildName) {
-
+                //Values never Changes.
             }
 
             @Override
@@ -79,12 +72,12 @@ public class Window extends JFrame implements ActionListener {
 
             @Override
             public void onChildMoved(DataSnapshot snapshot, String previousChildName) {
-
+                //Values are sorted on the Client Side so this is not needed.
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-
+                database.pushError(error.getMessage() + " ||  " + error.getDetails() + " || " + error.getCode());
             }
         });
     }
@@ -99,9 +92,7 @@ public class Window extends JFrame implements ActionListener {
     }
 
     private void screenLeftSide() {
-        //TODO: Initiate Left side of the screen which will have a table from the database of the top 20 HighScores.
         Leftbox = Box.createVerticalBox();
-        //Object[][] data = Utils.listToArray(Score.getInstances());
 
         tableModel = new TableModel();
 

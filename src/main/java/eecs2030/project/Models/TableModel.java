@@ -54,6 +54,7 @@ public class TableModel extends AbstractTableModel {
         if (score == null) {
             score = new Score(name, points);
             scores.put(key, score);
+            sortByValue();
         }
         this.fireTableDataChanged();
     }
@@ -78,7 +79,7 @@ public class TableModel extends AbstractTableModel {
 
     private void sortByValue() {
         List<Map.Entry<String, Score>> list = new LinkedList<>(this.scores.entrySet());
-        Collections.sort(list, (o1, o2) -> ((Comparable<Score>) o1.getValue()).compareTo(o2.getValue()));
+        Collections.sort(list, Comparator.comparing(Map.Entry::getValue));
 
         Map<String, Score> result = new LinkedHashMap<>();
         for (Iterator<Map.Entry<String, Score>> it = list.iterator(); it.hasNext();) {
