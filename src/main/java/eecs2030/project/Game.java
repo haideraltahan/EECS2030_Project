@@ -8,14 +8,15 @@ import java.awt.event.*;
 
 /**
  * Created by Haider on 7/4/2017.
+ *
  */
 public class Game extends JPanel implements ActionListener {
 
     private final int B_WIDTH = Constants.WIDTH;
     private final int B_HEIGHT = Constants.HEIGHT;
-    private final int DOT_SIZE = 10;
-    private final int ALL_DOTS = 900;
-    private final int RAND_POS = 29;
+    private final int DOT_SIZE = 5;
+    private final int ALL_DOTS = B_HEIGHT * B_WIDTH;
+    private final int RAND_POS = 30;
     private final int DELAY = 140;
 
     private final int x[] = new int[ALL_DOTS];

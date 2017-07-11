@@ -85,7 +85,7 @@ public class Window extends JFrame implements ActionListener {
     private void screenRightSide() {
         //Box Holder for the game
         Rightbox = new JPanel();
-        Rightbox.setBackground(Constants.BACKGROUND_COLOR);
+        Rightbox.setBackground(Color.ORANGE);
         Rightbox.setMinimumSize(new Dimension(((int) (Constants.WIDTH / 1.5)), Constants.HEIGHT));
         addMainMenu();
         this.add(Rightbox,BorderLayout.CENTER);
@@ -134,6 +134,7 @@ public class Window extends JFrame implements ActionListener {
         switch (command) {
             case Constants.START_COMMAND:
                 mainMenuBox.setVisible(false);
+                Rightbox.grabFocus();
                 Rightbox.add(new Game());
                 this.revalidate();
                 break;

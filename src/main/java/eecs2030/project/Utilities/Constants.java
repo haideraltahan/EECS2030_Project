@@ -28,11 +28,12 @@ public final class Constants {
     public static final String HIGHSCORES_HEADER_NAME = "Player Name";
     public static final String HIGHSCORES_HEADER_POINTS = "Points";
 
-    //<----- COLORS ------->
-    public static final Color BACKGROUND_COLOR = new Color(0,209,73);
 
     //<----- Labels ------->
     public static final String START_GAME_BUTTON = "START GAME!";
     public static final String EXIT_GAME_BUTTON = "QUIT";
     public static final String HIGHSCORES_LABEL = "TOP 20 SCORES";
+
+    //<----- Enums -------->
+    public enum Directions { NORTH, EAST, SOUTH, WESET }
 }
