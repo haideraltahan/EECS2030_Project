@@ -17,8 +17,9 @@ public final class Constants {
     public static final String DATABASE_MAIN_OBJECT = "Scores";
     public static final String DATABASE_ERROR_OBJECT = "Error";
 
-    public static final int HEIGHT = 600;
-    public static final int WIDTH = 600;
+    public static final int HEIGHT = 622;
+    public static final int WIDTH = 572;
+    public static final int GAME_WIDTH = 400;
 
     public static final String START_COMMAND = "start";
     public static final String EXIT_COMMAND = "exit";
@@ -35,5 +36,5 @@ public final class Constants {
     public static final String HIGHSCORES_LABEL = "TOP 20 SCORES";
 
     //<----- Enums -------->
-    public enum Directions { NORTH, EAST, SOUTH, WESET }
+    public enum Directions { NORTH, EAST, SOUTH, WEST }
 }

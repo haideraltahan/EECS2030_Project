@@ -29,9 +29,6 @@ public class Window extends JFrame implements ActionListener {
         super(Constants.GAME_TITLE);
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setVisible(true);
-        this.setLayout(new BorderLayout());
-
         this.setMinimumSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
         this.setResizable(false);
 
@@ -40,14 +37,15 @@ public class Window extends JFrame implements ActionListener {
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 
         // <------ INITIAL SETUP FUNCTIONS ---->
-        screenRightSide();
         screenLeftSide();
+        screenRightSide();
         databaseSetUp();
 
         // <------ END SETUP FUNCTIONS --->
 
 
         this.pack();
+        this.setVisible(true);
         this.setLocationRelativeTo(null);
     }
 
@@ -84,25 +82,24 @@ public class Window extends JFrame implements ActionListener {
 
     private void screenRightSide() {
         //Box Holder for the game
-        Rightbox = new JPanel();
+        Rightbox = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         Rightbox.setBackground(Color.ORANGE);
-        Rightbox.setMinimumSize(new Dimension(((int) (Constants.WIDTH / 1.5)), Constants.HEIGHT));
+        Rightbox.setMinimumSize(new Dimension(Constants.GAME_WIDTH, Constants.HEIGHT));
         addMainMenu();
-        this.add(Rightbox,BorderLayout.CENTER);
+        this.getContentPane().add(Rightbox,BorderLayout.CENTER);
     }
+    
 
     private void screenLeftSide() {
         Leftbox = Box.createVerticalBox();
-
+        Leftbox.setMinimumSize(new Dimension(200, 600));
         tableModel = new TableModel();
-
         JTable table = new JTable();
         table.setModel(tableModel);
-
         Leftbox.add(new JLabel(Constants.HIGHSCORES_LABEL));
         Leftbox.add(table.getTableHeader());
         Leftbox.add(table);
-        this.add(Leftbox,BorderLayout.WEST);
+        this.getContentPane().add(Leftbox,BorderLayout.BEFORE_LINE_BEGINS);
     }
 
     private void addMainMenu() {
@@ -135,7 +132,9 @@ public class Window extends JFrame implements ActionListener {
             case Constants.START_COMMAND:
                 mainMenuBox.setVisible(false);
                 Rightbox.grabFocus();
-                Rightbox.add(new Game());
+                Game newGame = new Game();
+                Rightbox.add(newGame);
+                newGame.requestFocus();
                 this.revalidate();
                 break;
             case Constants.EXIT_COMMAND:
