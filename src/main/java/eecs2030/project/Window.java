@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by Haider on 7/4/2017.
  */
+@SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
 
     private Box Leftbox;
