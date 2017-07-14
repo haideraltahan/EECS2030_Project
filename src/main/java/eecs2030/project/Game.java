@@ -6,11 +6,14 @@ import eecs2030.project.Utilities.Constants.Directions;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
- * Created by Haider,Jason on 7/4/2017.
+ * Created by Haider on 7/4/2017.
  *
  */
+@SuppressWarnings("serial")
 public class Game extends JPanel implements ActionListener {
 
     private final int B_WIDTH = Constants.GAME_WIDTH;
@@ -18,12 +21,10 @@ public class Game extends JPanel implements ActionListener {
     private final int DOT_SIZE = 25;
     private final int X_DOTS = B_WIDTH / DOT_SIZE;
     private final int Y_DOTS = B_HEIGHT / DOT_SIZE;
-    private final int ALL_DOTS = X_DOTS * Y_DOTS;
     
     private final int DELAY = 140;
 
-    private final int x[] = new int[ALL_DOTS];
-    private final int y[] = new int[ALL_DOTS];
+    private final LinkedList<Point> positions = new LinkedList<Point>();
 
     private int dots;
     private int apple_x;
@@ -42,8 +43,10 @@ public class Game extends JPanel implements ActionListener {
     private Image snake;
     private Image apple;
 
+    /**
+     * Constructor
+     */
     public Game() {
-
         addKeyListener(new TAdapter());
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
@@ -54,6 +57,9 @@ public class Game extends JPanel implements ActionListener {
         initGame();
     }
 
+    /**
+     * Load/initiate necessary images
+     */
     private void loadImages() {
     	rightMouth = new ImageIcon("assets/rightmouth.png").getImage();
     	leftMouth = new ImageIcon("assets/leftmouth.png").getImage();
@@ -63,6 +69,9 @@ public class Game extends JPanel implements ActionListener {
     	apple = new ImageIcon("assets/apple.png").getImage();
     }
 
+    /**
+     * Initiate the game, reset fields
+     */
     private void initGame() {
     	initSnakeDots();
     	locateApple();
@@ -77,10 +86,10 @@ public class Game extends JPanel implements ActionListener {
     private void initSnakeDots() {
     	direction = Directions.EAST;
     	dots = 3;
-    	for (int i=0; i<dots; i++) {
-    		x[i] = (dots-i)*50;
-    		y[i] = 100;
-    	}
+    	positions.clear();
+    	for (int i=0; i<dots; i++)
+    		positions.add(new Point(25*(dots-i),100));
+    	
     }
 
     @Override
@@ -90,6 +99,10 @@ public class Game extends JPanel implements ActionListener {
         doDrawing(g);
     }
     
+    /**
+     * Draw the apple and snake
+     * @param g
+     */
     private void doDrawing(Graphics g) {
 
         if (inGame) {
@@ -97,17 +110,18 @@ public class Game extends JPanel implements ActionListener {
             g.drawImage(apple, apple_x, apple_y, this);
             
             // draw snake
-            for (int z = 0; z < dots; z++) {
-                if (z == 0) {
-                	switch (direction) {
-                	case EAST: g.drawImage(rightMouth, x[z], y[z], this); break;
-                	case WEST: g.drawImage(leftMouth, x[z], y[z], this); break;
-                	case NORTH: g.drawImage(upMouth, x[z], y[z], this); break;
-                	case SOUTH: g.drawImage(downMouth, x[z], y[z], this); break;
-                	}
-                } else {
-                    g.drawImage(snake, x[z], y[z], this);
-                }
+            Iterator<Point> iter = positions.iterator();
+            Point head = iter.next();
+            switch (direction) {
+        	case EAST: g.drawImage(rightMouth, head.x, head.y, this); break;
+        	case WEST: g.drawImage(leftMouth, head.x, head.y, this); break;
+        	case NORTH: g.drawImage(upMouth, head.x, head.y, this); break;
+        	case SOUTH: g.drawImage(downMouth, head.x, head.y, this); break;
+        	}
+            
+            while(iter.hasNext()) {
+            	Point tile = iter.next();
+            	g.drawImage(snake, tile.x, tile.y, this);
             }
 
             Toolkit.getDefaultToolkit().sync();
@@ -119,6 +133,10 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * Game over. Screen shows game over, and instructions for restart and quit.
+     * @param g the Graphics
+     */
     private void gameOver(Graphics g) {
 
         String msg = "Game Over";
@@ -136,69 +154,72 @@ public class Game extends JPanel implements ActionListener {
         g.drawString(restart, (B_WIDTH - metr.stringWidth(restart)) / 2, B_HEIGHT / 2 + 50);
     }
 
+    /**
+     * Check if snake eats an apple, if so locate a new apple.
+     */
     private void checkApple() {
-
-        if ((x[0] == apple_x) && (y[0] == apple_y)) {
-        	System.out.println("Got an apple");
-            dots++;
-            locateApple();
-        }
+    	Point head = positions.getFirst();
+    	if (head.x == apple_x && head.y == apple_y) {
+    		dots++;
+    		locateApple();
+    	}
     }
     
+    /**
+     * Randomize new apple location that is not contains in the snake body
+     */
     private void locateApple() {
-        int r = (int) (Math.random() * (X_DOTS-1));
-        apple_x = ((r * DOT_SIZE));
-
-        r = (int) (Math.random() * (Y_DOTS-1));
-        apple_y = ((r * DOT_SIZE));
+        do {
+            apple_x = (((int) (Math.random() * (X_DOTS-1)) * DOT_SIZE));
+            apple_y = (((int) (Math.random() * (Y_DOTS-1)) * DOT_SIZE));        	
+        } while (positions.contains(new Point(apple_x, apple_y)));
     }
 
+    /**
+     * Update snake's positions
+     */
     private void move() {
-
-        for (int z = dots; z > 0; z--) {
-            x[z] = x[(z - 1)];
-            y[z] = y[(z - 1)];
-        }
-        
-        
-        switch (direction) {
-    	case WEST: x[0] -= DOT_SIZE; break;
-    	case EAST: x[0] += DOT_SIZE; break;
-    	case NORTH: y[0] -= DOT_SIZE; break;
-    	case SOUTH: y[0] += DOT_SIZE; break;
+    	Point newHead = (Point) positions.getFirst().clone();
+    	// remove last only if snake didn't eat an apple
+    	if (positions.size() == dots)
+    		positions.removeLast();
+    	switch (direction) {
+    	case WEST: newHead.setLocation(newHead.x-DOT_SIZE, newHead.y); break;
+    	case EAST: newHead.setLocation(newHead.x+DOT_SIZE, newHead.y); break;
+    	case NORTH: newHead.setLocation(newHead.x, newHead.y-DOT_SIZE); break;
+    	case SOUTH: newHead.setLocation(newHead.x, newHead.y+DOT_SIZE); break;
     	}
-
+    	positions.addFirst(newHead);
     }
 
+    /**
+     * Check if snake hit itself or the walls. Game Over if collision happens.
+     */
     private void checkCollision() {
-
-    	// collision when head touches body
-        for (int z = dots-1; z > 3; z--) {
-        	if (x[0] == x[z] && y[0] == y[z])
-        		inGame = false;
-        }
-        
-        // collision when head touches wall
-        if (y[0] >= B_HEIGHT || y[0] < 0 || x[0] >= B_WIDTH || x[0] < 0)
-            inGame = false;
-
-        if (!inGame)
-            timer.stop();
+    	Point head = positions.getFirst();
+    	// collision when head touches body or walls
+    	if (positions.lastIndexOf(head) > 0 || head.y >= B_HEIGHT || head.y < 0 || head.x >= B_WIDTH || head.x < 0) {
+    		inGame = false;
+    		timer.stop();
+    	}   
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         if (inGame) {
-
             checkApple();
             checkCollision();
             move();
         }
-
         repaint();
     }
 
+    /**
+     * TAdapter manage all necessary keys operations
+     * 
+     * @author jianxiongwang
+     *
+     */
     private class TAdapter extends KeyAdapter {
 
         @Override
