@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 /**
  * Created by Haider on 7/4/2017.
  */
@@ -50,6 +49,11 @@ public class Window extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
     }
 
+    /**
+     * Creates a new database
+     *
+     * @throws Exception
+     */
     private void databaseSetUp() throws Exception {
         this.database = new Database();
         DatabaseReference databaseRef = database.getDatabaseRef();
