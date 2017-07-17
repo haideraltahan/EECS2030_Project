@@ -5,11 +5,6 @@ import eecs2030.project.Utilities.Constants;
 import javax.swing.table.AbstractTableModel;
 import java.util.*;
 
-/**
- * Created by Haider on 2017-07-06.
- * This class model point on the surface of the Earth.
- * It is immutable and multiton.
- */
 public class TableModel extends AbstractTableModel {
     private Map<String, Score> scores = new LinkedHashMap<>();
 
@@ -24,6 +19,11 @@ public class TableModel extends AbstractTableModel {
         return null;
     }
 
+    /**
+     * Returns the size of scores
+     *
+     * @return the size of scores
+     */
     @Override
     public int getRowCount() {
         return scores.size();
