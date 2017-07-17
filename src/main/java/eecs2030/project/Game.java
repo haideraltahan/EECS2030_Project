@@ -57,12 +57,12 @@ public class Game extends JPanel implements ActionListener {
      * Load/initiate necessary images
      */
     private void loadImages() {
-    	rightMouth = new ImageIcon("src\\main\\resources\\rightmouth.png").getImage();
-    	leftMouth = new ImageIcon("src\\main\\resources\\leftmouth.png").getImage();
-    	upMouth = new ImageIcon("src\\main\\resources\\upmouth.png").getImage();
-    	downMouth = new ImageIcon("src\\main\\resources\\downmouth.png").getImage();
-    	snake = new ImageIcon("src\\main\\resources\\snakeimage.png").getImage();
-    	apple = new ImageIcon("src\\main\\resources\\apple.png").getImage();
+    	rightMouth = new ImageIcon("src/main/resources/rightmouth.png").getImage();
+    	leftMouth = new ImageIcon("src/main/resources/leftmouth.png").getImage();
+    	upMouth = new ImageIcon("src/main/resources/upmouth.png").getImage();
+    	downMouth = new ImageIcon("src/main/resources/downmouth.png").getImage();
+    	snake = new ImageIcon("src/main/resources/snakeimage.png").getImage();
+    	apple = new ImageIcon("src/main/resources/apple.png").getImage();
     }
 
     /**
