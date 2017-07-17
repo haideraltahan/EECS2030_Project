@@ -9,10 +9,6 @@ import java.awt.event.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-/**
- * Created by Haider on 7/4/2017.
- *
- */
 @SuppressWarnings("serial")
 public class Game extends JPanel implements ActionListener {
 
@@ -44,7 +40,7 @@ public class Game extends JPanel implements ActionListener {
     private Image apple;
 
     /**
-     * Constructor
+     * Constructor for the Game
      */
     public Game() {
         addKeyListener(new TAdapter());

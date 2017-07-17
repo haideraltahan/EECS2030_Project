@@ -1,8 +1,5 @@
 package eecs2030.project.Models;
 
-/**
- * Created by Haider on 7/4/2017.
- */
 public final class Score implements Comparable<Score> {
 
     private final String name;
@@ -48,6 +45,13 @@ public final class Score implements Comparable<Score> {
         return new Integer(this.points);
     }
 
+    /**
+     * Returns a negative integer, zero, or a positive integer if the provided score is less than, equal to, or greater
+     * than the current points.
+     *
+     * @param score The score to be compared with the current points
+     * @return -1, 0, or 1 if the provided score is less than, equal to, or greater than the current points.
+     */
     @Override
     public int compareTo(Score score) {
         if (score == null)
