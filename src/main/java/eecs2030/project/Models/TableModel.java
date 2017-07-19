@@ -59,6 +59,13 @@ public class TableModel extends AbstractTableModel {
         this.fireTableDataChanged();
     }
 
+    /**
+     * Adds a new score in the linked hashmap if it is a new score and sorts the linked hashmap. FireTableDataChange
+     * method is called
+     *
+     * @param key The key
+     * @param packed The value
+     */
     public void addScore(String key, String packed) {
         Score score = scores.get(key);
         if (score == null) {
@@ -69,6 +76,11 @@ public class TableModel extends AbstractTableModel {
         this.fireTableDataChanged();
     }
 
+    /**
+     * Removes the key from the linked hashmap if it does not exist and calls the fireTableData method
+     *
+     * @param key The key to check in the linked hashmap
+     */
     public void removeScore(String key) {
         Score point = scores.get(key);
         if (point != null) {
@@ -77,6 +89,9 @@ public class TableModel extends AbstractTableModel {
         this.fireTableDataChanged();
     }
 
+    /**
+     *  Sorts the scores by value
+     */
     private void sortByValue() {
         List<Map.Entry<String, Score>> list = new LinkedList<>(this.scores.entrySet());
         Collections.sort(list, Comparator.comparing(Map.Entry::getValue));
