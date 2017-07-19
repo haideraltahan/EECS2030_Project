@@ -89,7 +89,7 @@ public class Game extends JPanel implements ActionListener {
     
     /**
      * Draw the apple and snake
-     * @param g
+     * @param g The graphics
      */
     private void doDrawing(Graphics g) {
 
@@ -125,7 +125,7 @@ public class Game extends JPanel implements ActionListener {
      * Game over. Screen shows game over, and instructions for restart and quit.
      * Score will be added to the database.
      * 
-     * @param g the Graphics
+     * @param g The graphics
      */
     private void gameOver(Graphics g) {
     	Font large = new Font("Helvetica", Font.BOLD, 32);
