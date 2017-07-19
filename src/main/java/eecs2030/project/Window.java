@@ -9,6 +9,9 @@ import eecs2030.project.Utilities.Constants;
 import eecs2030.project.Utilities.Database;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +24,8 @@ public class Window extends JFrame implements ActionListener {
     private Database database;
     private TableModel tableModel;
     private Box mainMenuBox;
+    private Box gameStatusBar;
+    private JTextField playerNameTF;
 
     public Window() throws Exception {
         super(Constants.GAME_TITLE);
@@ -52,7 +57,7 @@ public class Window extends JFrame implements ActionListener {
      * @throws Exception
      */
     private void databaseSetUp() throws Exception {
-        this.database = new Database();
+        this.database = Database.getInstance();
         DatabaseReference databaseRef = database.getDatabaseRef();
         databaseRef.orderByChild("points").limitToFirst(10).addChildEventListener(new ChildEventListener() {
             @Override
@@ -105,8 +110,12 @@ public class Window extends JFrame implements ActionListener {
     }
 
     private void addMainMenu() {
-        JButton btnStart = new JButton(Constants.START_GAME_BUTTON);
+    	JLabel playerNameLabel = new JLabel(Constants.PLAYER_NAME_LABEL);
+    	this.playerNameTF = new JTextField("",20);
+    	
+    	JButton btnStart = new JButton(Constants.START_GAME_BUTTON);
         JButton btnQuit = new JButton(Constants.EXIT_GAME_BUTTON);
+        btnStart.setEnabled(false);
 
         btnStart.setActionCommand(Constants.START_COMMAND);
         btnQuit.setActionCommand(Constants.EXIT_COMMAND);
@@ -116,9 +125,33 @@ public class Window extends JFrame implements ActionListener {
 
         btnStart.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnQuit.setAlignmentX(Component.CENTER_ALIGNMENT);
+    	
+    	// Listen for changes in the text
+    	this.playerNameTF.getDocument().addDocumentListener(new DocumentListener() {
+    	  public void changedUpdate(DocumentEvent e) {
+    	    warn();
+    	  }
+    	  public void removeUpdate(DocumentEvent e) {
+    	    warn();
+    	  }
+    	  public void insertUpdate(DocumentEvent e) {
+    	    warn();
+    	  }
+    	  public void warn() {
+    		  String playerName = playerNameTF.getText();
+    		  btnStart.setEnabled(playerName.length() > 0);
+    	  }
+    	});
 
+    	Box hBox = Box.createHorizontalBox();
+    	hBox.add(playerNameLabel);
+    	hBox.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING));
+    	hBox.add(this.playerNameTF);
+    	
         mainMenuBox = Box.createVerticalBox();
-        mainMenuBox.add(Box.createVerticalStrut(Constants.HEIGHT / 2 - 50));
+        mainMenuBox.add(Box.createVerticalStrut(Constants.HEIGHT / 2));
+        mainMenuBox.add(hBox);
+        mainMenuBox.add(Box.createVerticalStrut(Constants.VERTICAL_PADDING));
         mainMenuBox.add(btnStart);
         mainMenuBox.add(Box.createVerticalStrut(Constants.VERTICAL_PADDING));
         mainMenuBox.add(btnQuit);
@@ -134,7 +167,10 @@ public class Window extends JFrame implements ActionListener {
             case Constants.START_COMMAND:
                 mainMenuBox.setVisible(false);
                 Rightbox.grabFocus();
-                Game newGame = new Game();
+                String name = this.playerNameTF.getText().trim();
+                GameStatusBar gameBar = new GameStatusBar(name);
+                Game newGame = new Game(name, gameBar);
+                Rightbox.add(gameBar);
                 Rightbox.add(newGame);
                 newGame.requestFocus();
                 this.revalidate();
