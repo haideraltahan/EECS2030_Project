@@ -1,54 +1,56 @@
 package eecs2030.project;
 
+import eecs2030.project.Models.Score;
+import eecs2030.project.Models.Tile;
 import eecs2030.project.Utilities.Constants;
 import eecs2030.project.Utilities.Constants.Directions;
+import eecs2030.project.Utilities.Database;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements ActionListener {
 
-    private final int B_WIDTH = Constants.GAME_WIDTH;
-    private final int B_HEIGHT = Constants.HEIGHT;
-    private final int DOT_SIZE = 25;
-    private final int X_DOTS = B_WIDTH / DOT_SIZE;
-    private final int Y_DOTS = B_HEIGHT / DOT_SIZE;
+    private final int X_DOTS = Constants.GAME_WIDTH / Constants.DOT_SIZE;
+    private final int Y_DOTS = Constants.GAME_HEIGHT / Constants.DOT_SIZE;
+    private final int APPLE_SCORE = 5;
     
+    // delay for timer
     private final int DELAY = 140;
 
-    private final LinkedList<Point> positions = new LinkedList<Point>();
-
-    private int dots;
-    private int apple_x;
-    private int apple_y;
-
-    private Directions direction = Directions.EAST;
+    private Snake snake; 
+    private Tile apple;
+    private final String playerName;
+    
     private boolean inGame = true;
     
     private Timer timer;
     
+    private final GameStatusBar gameBar;
+        
     // Images
     private Image rightMouth;
     private Image leftMouth;
     private Image upMouth;
     private Image downMouth;
-    private Image snake;
-    private Image apple;
+    private Image snakeImage;
+    private Image appleImage;
 
     /**
      * Constructor for the Game
      */
-    public Game() {
+    public Game(String playerName, GameStatusBar bar) {
         addKeyListener(new TAdapter());
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         
         setBackground(Color.DARK_GRAY);
-        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
+        setPreferredSize(new Dimension(Constants.GAME_WIDTH, Constants.GAME_HEIGHT));
+        this.playerName = playerName;
+        this.gameBar = bar;
         loadImages();
         initGame();
     }
@@ -61,32 +63,22 @@ public class Game extends JPanel implements ActionListener {
     	leftMouth = new ImageIcon("src/main/resources/leftmouth.png").getImage();
     	upMouth = new ImageIcon("src/main/resources/upmouth.png").getImage();
     	downMouth = new ImageIcon("src/main/resources/downmouth.png").getImage();
-    	snake = new ImageIcon("src/main/resources/snakeimage.png").getImage();
-    	apple = new ImageIcon("src/main/resources/apple.png").getImage();
+    	snakeImage = new ImageIcon("src/main/resources/snakeimage.png").getImage();
+    	appleImage = new ImageIcon("src/main/resources/apple.png").getImage();
     }
 
     /**
      * Initiate the game, reset fields
      */
     private void initGame() {
-    	initSnakeDots();
+    	this.snake = new Snake();
+    	this.gameBar.updateScoreLabel(0);
     	locateApple();
         timer = new Timer(DELAY, this);
         timer.start();
         inGame = true;
     }
-    
-    /**
-     * Initiate the first three dots and direction for the snake
-     */
-    private void initSnakeDots() {
-    	direction = Directions.EAST;
-    	dots = 3;
-    	positions.clear();
-    	for (int i=0; i<dots; i++)
-    		positions.add(new Point(25*(dots-i),100));
-    	
-    }
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -103,23 +95,23 @@ public class Game extends JPanel implements ActionListener {
 
         if (inGame) {
         	// draw apple
-            g.drawImage(apple, apple_x, apple_y, this);
+            g.drawImage(appleImage, apple.x, apple.y, this);
             
             // draw snake
-            Iterator<Point> iter = positions.iterator();
-            Point head = iter.next();
-            switch (direction) {
+         // draw head
+        	Tile head = snake.getHead();
+        	switch (snake.getDirection()) {
         	case EAST: g.drawImage(rightMouth, head.x, head.y, this); break;
         	case WEST: g.drawImage(leftMouth, head.x, head.y, this); break;
         	case NORTH: g.drawImage(upMouth, head.x, head.y, this); break;
         	case SOUTH: g.drawImage(downMouth, head.x, head.y, this); break;
         	}
-            
-            while(iter.hasNext()) {
-            	Point tile = iter.next();
-            	g.drawImage(snake, tile.x, tile.y, this);
+        	// draw body
+        	Iterator<Tile> iter = snake.getBodyIterator();
+        	while(iter.hasNext()) {
+            	Tile tile = iter.next();
+            	g.drawImage(snakeImage, tile.x, tile.y, this);
             }
-
             Toolkit.getDefaultToolkit().sync();
             g.dispose();
 
@@ -131,32 +123,57 @@ public class Game extends JPanel implements ActionListener {
 
     /**
      * Game over. Screen shows game over, and instructions for restart and quit.
+     * Score will be added to the database.
+     * 
      * @param g The graphics
      */
     private void gameOver(Graphics g) {
-
-        String msg = "Game Over";
-        Font large = new Font("Helvetica", Font.BOLD, 32);
-        FontMetrics metr = getFontMetrics(large);
-
-        g.setColor(Color.white);
-        g.setFont(large);
-        g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
-        
-        String restart = "R to restart or Q to quit";
+    	Font large = new Font("Helvetica", Font.BOLD, 32);
+    	Font medium = new Font("Helvetica", Font.PLAIN, 19);
         Font small = new Font("Helvetica", Font.PLAIN, 16);
-        metr = getFontMetrics(small);
+        g.setColor(Color.white);
+        
+        String msg = "Game Over";
+        g.setFont(large);
+        int y = Constants.GAME_HEIGHT / 3;
+        g.drawString(msg, this.calcMessageCenterPositionX(msg, large), y);
+        int score = snake.getScore();
+        msg = "Score: " + score;
         g.setFont(small);
-        g.drawString(restart, (B_WIDTH - metr.stringWidth(restart)) / 2, B_HEIGHT / 2 + 50);
+        g.drawString(msg, this.calcMessageCenterPositionX(msg, medium), y+=40);
+        msg = "R to restart or Q to quit";
+        g.setFont(small);
+        g.drawString(msg, this.calcMessageCenterPositionX(msg, small), y+=40);
+        
+        // Add score to database
+        try {
+        	Database.getInstance().addScore(new Score(this.playerName, score));
+        } catch (Exception e) {
+        	System.out.println(e.getMessage());
+        }
+    }
+    
+    /**
+     * Get the center x coordinate for a given message and its font
+     * 
+     * @param msg a message
+     * @param font message font
+     * @return the x coordinate
+     */
+    private int calcMessageCenterPositionX(String msg, Font font) {
+    	FontMetrics metr = getFontMetrics(font);
+    	return (Constants.GAME_WIDTH - metr.stringWidth(msg))/2;
     }
 
     /**
      * Check if snake eats an apple, if so locate a new apple.
      */
     private void checkApple() {
-    	Point head = positions.getFirst();
-    	if (head.x == apple_x && head.y == apple_y) {
-    		dots++;
+    	Tile head = snake.getHead();
+		if (head.x == apple.x && head.y == apple.y) {
+    		snake.gains((int) (Math.random() * 2) + 1);
+    		snake.addScore(APPLE_SCORE);
+    		this.gameBar.updateScoreLabel(snake.getScore());
     		locateApple();
     	}
     }
@@ -165,53 +182,35 @@ public class Game extends JPanel implements ActionListener {
      * Randomize new apple location that is not contains in the snake body
      */
     private void locateApple() {
-        do {
-            apple_x = (((int) (Math.random() * (X_DOTS-1)) * DOT_SIZE));
-            apple_y = (((int) (Math.random() * (Y_DOTS-1)) * DOT_SIZE));        	
-        } while (positions.contains(new Point(apple_x, apple_y)));
+    	do {
+    		apple = new Tile((((int) (Math.random() * (X_DOTS-1)) * Constants.DOT_SIZE)),(((int) (Math.random() * (Y_DOTS-1)) * Constants.DOT_SIZE)));
+    	} while(snake.containsTile(apple)); 
     }
 
     /**
-     * Update snake's positions
+     * Check if snake hit itself or the walls.
+     * Snake will be removed if collision happens and Game Over if all snakes die.
      */
-    private void move() {
-    	Point newHead = (Point) positions.getFirst().clone();
-    	// remove last only if snake didn't eat an apple
-    	if (positions.size() == dots)
-    		positions.removeLast();
-    	switch (direction) {
-    	case WEST: newHead.setLocation(newHead.x-DOT_SIZE, newHead.y); break;
-    	case EAST: newHead.setLocation(newHead.x+DOT_SIZE, newHead.y); break;
-    	case NORTH: newHead.setLocation(newHead.x, newHead.y-DOT_SIZE); break;
-    	case SOUTH: newHead.setLocation(newHead.x, newHead.y+DOT_SIZE); break;
-    	}
-    	positions.addFirst(newHead);
-    }
-
-    /**
-     * Check if snake hit itself or the walls. Game Over if collision happens.
-     */
-    private void checkCollision() {
-    	Point head = positions.getFirst();
-    	// collision when head touches body or walls
-    	if (positions.lastIndexOf(head) > 0 || head.y >= B_HEIGHT || head.y < 0 || head.x >= B_WIDTH || head.x < 0) {
-    		inGame = false;
-    		timer.stop();
-    	}   
+    private void checkCollisions() {
+    	Tile head = snake.getHead();
+		if (snake.checkCollision() || head.y >= Constants.GAME_HEIGHT || head.y < 0 || head.x >= Constants.GAME_WIDTH || head.x < 0) {
+			inGame = false;
+			timer.stop();
+		}
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (inGame) {
             checkApple();
-            checkCollision();
-            move();
+            checkCollisions();
+            snake.move();
         }
         repaint();
     }
 
     /**
-     * TAdapter manage all necessary keys operations
+     * TAdapter manage all necessary keys operations for Game
      * 
      * @author jianxiongwang
      *
@@ -221,22 +220,23 @@ public class Game extends JPanel implements ActionListener {
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
+            Directions direction = snake.getDirection();
             switch (key) {
             case KeyEvent.VK_LEFT:
-            	if (direction != Directions.EAST)
-            		direction = Directions.WEST;
+            	if (direction != Directions.EAST || direction != Directions.WEST)
+            		snake.setDirection(Directions.WEST);
             	break;
             case KeyEvent.VK_RIGHT: 
-            	if (direction != Directions.WEST)
-            		direction = Directions.EAST; 
+            	if (direction != Directions.WEST || direction != Directions.EAST)
+            		snake.setDirection(Directions.EAST); 
             	break;
             case KeyEvent.VK_UP: 
-            	if (direction != Directions.SOUTH)
-            		direction = Directions.NORTH; 
+            	if (direction != Directions.SOUTH || direction != Directions.NORTH)
+            		snake.setDirection(Directions.NORTH); 
             	break;
             case KeyEvent.VK_DOWN: 
-            	if (direction != Directions.NORTH)
-            		direction = Directions.SOUTH; 
+            	if (direction != Directions.SOUTH || direction != Directions.NORTH)
+            		snake.setDirection(Directions.SOUTH); 
             	break;
             case KeyEvent.VK_R:
             	if (!inGame)

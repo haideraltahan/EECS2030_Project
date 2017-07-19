@@ -24,7 +24,6 @@ public final class Score implements Comparable<Score> {
     public Score(String jsonSRC) {
         this.name = jsonSRC.substring(jsonSRC.indexOf("name=") + 5, jsonSRC.indexOf(','));
         this.points = Integer.parseInt(jsonSRC.substring(jsonSRC.indexOf("points=") + 7, jsonSRC.indexOf('}')));
-        ;
     }
 
     /**
@@ -33,7 +32,7 @@ public final class Score implements Comparable<Score> {
      * @return The current player's name
      */
     public String getName() {
-        return new String(this.name);
+        return this.name;
     }
 
     /**
@@ -42,7 +41,7 @@ public final class Score implements Comparable<Score> {
      * @return The current player's points
      */
     public int getPoints() {
-        return new Integer(this.points);
+        return this.points;
     }
 
     /**

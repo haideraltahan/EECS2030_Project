@@ -19,8 +19,10 @@ public final class Database{
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
     private DatabaseReference databaseRefError;
+    
+    private static Database INSTANCE;
 
-    public Database() throws Exception {
+    private Database() throws Exception {
         File file = new File(this.getClass().getResource(Constants.FIREBASE_FILE_PATH).getPath());
         FileInputStream serviceAccount = new FileInputStream(file);
 
@@ -34,6 +36,13 @@ public final class Database{
         this.database = FirebaseDatabase.getInstance();
         this.databaseRef = this.database.getReference(Constants.DATABASE_MAIN_OBJECT);
         this.databaseRefError = this.database.getReference(Constants.DATABASE_ERROR_OBJECT);
+    }
+    
+    public static Database getInstance() throws Exception {
+    	if (Database.INSTANCE == null) {
+    		Database.INSTANCE = new Database();
+    	}
+    	return Database.INSTANCE;
     }
 
     public void addScore(Score score){
