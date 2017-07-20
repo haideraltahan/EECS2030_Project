@@ -24,7 +24,6 @@ public class Window extends JFrame implements ActionListener {
     private Database database;
     private TableModel tableModel;
     private Box mainMenuBox;
-    private Box gameStatusBar;
     private JTextField playerNameTF;
 
     public Window() throws Exception {
@@ -59,7 +58,7 @@ public class Window extends JFrame implements ActionListener {
     private void databaseSetUp() throws Exception {
         this.database = Database.getInstance();
         DatabaseReference databaseRef = database.getDatabaseRef();
-        databaseRef.orderByChild("points").limitToFirst(10).addChildEventListener(new ChildEventListener() {
+        databaseRef.orderByChild("points").limitToLast(10).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 tableModel.addScore(dataSnapshot.getKey(), dataSnapshot.getValue().toString());

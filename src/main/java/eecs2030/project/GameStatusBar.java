@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import eecs2030.project.Utilities.Constants;
 
+@SuppressWarnings("serial")
 public class GameStatusBar extends JPanel {
 	
 	private final JLabel playerNameLabel;
