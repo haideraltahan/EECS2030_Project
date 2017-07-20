@@ -20,6 +20,7 @@ public class Game extends JPanel implements ActionListener {
     
     // delay for timer
     private final int DELAY = 140;
+    private boolean ableToSetDirection = true;
 
     private Snake snake; 
     private Tile apple;
@@ -77,6 +78,7 @@ public class Game extends JPanel implements ActionListener {
         timer = new Timer(DELAY, this);
         timer.start();
         inGame = true;
+        ableToSetDirection = true;
     }
 
 
@@ -205,6 +207,7 @@ public class Game extends JPanel implements ActionListener {
             checkApple();
             checkCollisions();
             snake.move();
+            this.ableToSetDirection = true;
         }
         repaint();
     }
@@ -220,31 +223,20 @@ public class Game extends JPanel implements ActionListener {
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
-            Directions direction = snake.getDirection();
-            switch (key) {
-            case KeyEvent.VK_LEFT:
-            	if (direction != Directions.EAST || direction != Directions.WEST)
-            		snake.setDirection(Directions.WEST);
-            	break;
-            case KeyEvent.VK_RIGHT: 
-            	if (direction != Directions.WEST || direction != Directions.EAST)
-            		snake.setDirection(Directions.EAST); 
-            	break;
-            case KeyEvent.VK_UP: 
-            	if (direction != Directions.SOUTH || direction != Directions.NORTH)
-            		snake.setDirection(Directions.NORTH); 
-            	break;
-            case KeyEvent.VK_DOWN: 
-            	if (direction != Directions.SOUTH || direction != Directions.NORTH)
-            		snake.setDirection(Directions.SOUTH); 
-            	break;
-            case KeyEvent.VK_R:
-            	if (!inGame)
-            		initGame();
-            	break;
-            case KeyEvent.VK_Q:
-            	System.exit(0);
-            	break;
+            if (inGame && ableToSetDirection) {
+                try {
+                	Directions direction = snake.getDirection();
+                	Directions newDirection = Directions.getDirection(key);
+                	if (direction.getValue() % 2 != newDirection.getValue() % 2) {
+                		snake.setDirection(newDirection);
+                		ableToSetDirection = false;
+                	}
+                } catch (Exception ex) {
+                	System.out.println(ex.getMessage());
+                }
+            } else {
+            	if (key == KeyEvent.VK_R) initGame();
+            	else if (key == KeyEvent.VK_Q) System.exit(0);
             }
         }
     }

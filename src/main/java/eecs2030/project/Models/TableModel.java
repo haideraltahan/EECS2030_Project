@@ -5,6 +5,7 @@ import eecs2030.project.Utilities.Constants;
 import javax.swing.table.AbstractTableModel;
 import java.util.*;
 
+@SuppressWarnings("serial")
 public class TableModel extends AbstractTableModel {
     private Map<String, Score> scores = new LinkedHashMap<>();
 
