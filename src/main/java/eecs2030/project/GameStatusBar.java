@@ -22,7 +22,7 @@ public class GameStatusBar extends JPanel {
      */
     public GameStatusBar(String playerName) {
     	this.setFocusable(false);
-        setBackground(Color.DARK_GRAY);
+        setBackground(Color.GRAY);
         setPreferredSize(new Dimension(Constants.GAME_WIDTH, BAR_HEIGHT));
         this.playerNameLabel = new JLabel("Player: " + playerName);
         this.playerNameLabel.setForeground(Color.white);
