@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="40c0611d-fa98-424b-862d-babcf0bc03cd" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/~$Report.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/~WRL1858.tmp" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/eecs2030/project/Window.java" afterPath="$PROJECT_DIR$/src/main/java/eecs2030/project/Window.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/eecs2030/project/Main.java" afterPath="$PROJECT_DIR$/src/main/java/eecs2030/project/Main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -68,7 +65,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SpeedLevel.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SpeedLevel.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/eecs2030/project/Models/SpeedLevel.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="51">
@@ -83,12 +80,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Database.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/eecs2030/project/Utilities/Database.java">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/eecs2030/project/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-91">
-              <caret line="12" column="19" lean-forward="false" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
-              <folding />
+            <state relative-caret-position="85">
+              <caret line="5" column="38" lean-forward="false" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -559,7 +558,6 @@
         <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Models/Buffer.java" />
         <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Models/Apple.java" />
         <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Main.form" />
-        <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Window.form" />
         <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Utilities/Constants.java" />
         <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/GameStatusBar.java" />
@@ -569,6 +567,7 @@
         <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Game.java" />
         <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Window.java" />
         <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Models/SpeedLevel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/eecs2030/project/Main.java" />
       </list>
     </option>
   </component>
@@ -1373,14 +1372,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/eecs2030/project/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/eecs2030/project/Utilities/Database.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-91">
@@ -1480,6 +1471,16 @@
             <element signature="e#356#357#0" expanded="true" />
             <element signature="e#383#384#0" expanded="true" />
             <element signature="e#409#410#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eecs2030/project/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="38" lean-forward="false" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

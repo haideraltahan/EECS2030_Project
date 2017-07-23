@@ -1,9 +1,11 @@
 package eecs2030.project;
 
-public class Main {
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-    public static void main(String[] args) throws Exception {
+public class Main extends Application{
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         new Window();
     }
-
 }
