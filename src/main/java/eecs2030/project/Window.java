@@ -57,7 +57,7 @@ public class Window extends JFrame implements ActionListener {
     private void databaseSetUp() throws Exception {
         this.database = Database.getInstance();
         DatabaseReference databaseRef = database.getDatabaseRef();
-        databaseRef.orderByChild("points").limitToLast(10).addChildEventListener(new ChildEventListener() {
+        databaseRef.orderByChild("points").limitToLast(20).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 tableModel.addScore(dataSnapshot.getKey(), dataSnapshot.getValue().toString());

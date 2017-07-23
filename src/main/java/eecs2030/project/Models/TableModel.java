@@ -50,16 +50,6 @@ public class TableModel extends AbstractTableModel {
         return null;
     }
 
-    public void addScore(String key, String name, int points) {
-        Score score = scores.get(key);
-        if (score == null) {
-            score = new Score(name, points);
-            scores.put(key, score);
-            sortByValue();
-        }
-        this.fireTableDataChanged();
-    }
-
     /**
      * Adds a new score in the linked hashmap if it is a new score and sorts the linked hashmap. FireTableDataChange
      * method is called

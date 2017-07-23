@@ -24,7 +24,7 @@ public class Game extends JPanel implements ActionListener {
 
     private Snake snake;
     private List<Buffer> buffers = new ArrayList<>();
-    private Class<?>[] bufferTypes = new Class[]{Poision.class};
+    private Class<?>[] bufferTypes = new Class[]{PoisonedApple.class};
     private Map<Directions, Image> snakeHeadImages = new HashMap<>();
     private Map<Class, Image> bufferImages = new HashMap<>();
 
@@ -55,13 +55,13 @@ public class Game extends JPanel implements ActionListener {
      */
     private void loadImages() {
 
-    	snakeBodyImage = new ImageIcon("src/main/resources/snakeimage.png").getImage();
-    	this.snakeHeadImages.put(Directions.NORTH, new ImageIcon("src/main/resources/upmouth.png").getImage());
-        this.snakeHeadImages.put(Directions.SOUTH, new ImageIcon("src/main/resources/downmouth.png").getImage());
-        this.snakeHeadImages.put(Directions.EAST, new ImageIcon("src/main/resources/rightmouth.png").getImage());
-        this.snakeHeadImages.put(Directions.WEST, new ImageIcon("src/main/resources/leftmouth.png").getImage());
-    	this.bufferImages.put(Apple.class, new ImageIcon("src/main/resources/apple.png").getImage());
-        this.bufferImages.put(Poision.class, new ImageIcon("src/main/resources/poision.png").getImage());
+    	snakeBodyImage = new ImageIcon(getClass().getResource("snakeimage.png")).getImage();
+    	this.snakeHeadImages.put(Directions.NORTH, new ImageIcon(getClass().getResource("upmouth.png")).getImage());
+        this.snakeHeadImages.put(Directions.SOUTH, new ImageIcon(getClass().getResource("downmouth.png")).getImage());
+        this.snakeHeadImages.put(Directions.EAST, new ImageIcon(getClass().getResource("rightmouth.png")).getImage());
+        this.snakeHeadImages.put(Directions.WEST, new ImageIcon(getClass().getResource("leftmouth.png")).getImage());
+    	this.bufferImages.put(Apple.class, new ImageIcon(getClass().getResource("apple.png")).getImage());
+        this.bufferImages.put(PoisonedApple.class, new ImageIcon(getClass().getResource("poision.png")).getImage());
     }
 
     /**

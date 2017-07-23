@@ -1,9 +1,9 @@
 package eecs2030.project.Models;
 
 /**
- * Poision, a simple poision to kill a snake.
+ * PoisonedApple, a simple poision to kill a snake.
  */
-public class Poision extends Buffer {
+public class PoisonedApple extends Buffer {
 
     /**
      * Constructor
@@ -11,7 +11,7 @@ public class Poision extends Buffer {
      * @param x x coordinate
      * @param y y coordinate
      */
-    public Poision(int x, int y) {
+    public PoisonedApple(int x, int y) {
         super(x, y);
     }
 
@@ -20,7 +20,7 @@ public class Poision extends Buffer {
      *
      * @param t a Tile
      */
-    public Poision(Tile t) {
+    public PoisonedApple(Tile t) {
         this(t.x, t.y);
     }
 
@@ -37,6 +37,6 @@ public class Poision extends Buffer {
 
     @Override
     public String toString() {
-        return super.toString() + " contains Poision.";
+        return super.toString() + " contains PoisonedApple.";
     }
 }
