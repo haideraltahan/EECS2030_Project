@@ -1,4 +1,4 @@
-package eecs2030.project;
+package eecs2030.project.Models;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,6 +24,7 @@ public class Snake {
 	private int remainGains = 0;
 	
 	private int score = 0;
+	private boolean isAlive = true;
 	
 	/**
 	 * Constructor
@@ -58,15 +59,6 @@ public class Snake {
     }
     
     /**
-     * Check if snake hit itself.
-     * 
-     * @return true if snake hit itself, and false otherwise.
-     */
-    public boolean checkCollision() {
-    	return tiles.lastIndexOf(tiles.getFirst()) > 0;
-    }
-    
-    /**
      * Check if the snake contains a Tile
      * @param t the checking Tile
      * @return true if contains false not.
@@ -78,6 +70,17 @@ public class Snake {
     //*********************************//
     //*********** Accessors ***********//
     //*********************************//
+
+    /**
+     * Check if snake hit itself or it's already died.
+     *
+     * @return true if snake still alive, and false otherwise.
+     */
+    public boolean isAlive() {
+        if (tiles.lastIndexOf(tiles.getFirst()) > 0)
+            this.isAlive = false;
+        return this.isAlive;
+    }
     
     /**
      * Get snake direction
@@ -120,7 +123,16 @@ public class Snake {
     //********************************//
     //*********** Mutators ***********//
     //********************************//
-    
+
+    /**
+     * Set snake alive status
+     *
+     * @param a new alive status
+     */
+    public void setAlive(boolean a) {
+        this.isAlive = a;
+    }
+
     /**
      * Set snake direction
      * 
@@ -146,6 +158,15 @@ public class Snake {
      */
     public void addScore(int n) {
     	this.score += n;
+    }
+
+    /**
+     * Add a buffer to snake
+     *
+     * @param b the buffer
+     */
+    public void addBuffer(Buffer b) {
+        b.addTo(this);
     }
     
 }

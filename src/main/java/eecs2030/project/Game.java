@@ -1,44 +1,38 @@
 package eecs2030.project;
 
-import eecs2030.project.Models.Score;
-import eecs2030.project.Models.Tile;
+import eecs2030.project.Models.*;
 import eecs2030.project.Utilities.Constants;
 import eecs2030.project.Utilities.Constants.Directions;
 import eecs2030.project.Utilities.Database;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Iterator;
+import java.util.*;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements ActionListener {
 
     private final int X_DOTS = Constants.GAME_WIDTH / Constants.DOT_SIZE;
     private final int Y_DOTS = Constants.GAME_HEIGHT / Constants.DOT_SIZE;
-    private final int APPLE_SCORE = 5;
-    
-    // delay for timer
-    private final int DELAY = 140;
-    private boolean ableToSetDirection = true;
-
-    private Snake snake; 
-    private Tile apple;
-    private final String playerName;
-    
-    private boolean inGame = true;
-    
-    private Timer timer;
-    
+    private final int DELAY = 140;  // delay for timer
+    private final int ADVANCED_BUFFER_CYCLE = 50;  // number of cycles for an advanced buffer to be located
     private final GameStatusBar gameBar;
-        
-    // Images
-    private Image rightMouth;
-    private Image leftMouth;
-    private Image upMouth;
-    private Image downMouth;
-    private Image snakeImage;
-    private Image appleImage;
+    private final String playerName;
+
+    private Snake snake;
+    private List<Buffer> buffers = new ArrayList<>();
+    private Class<?>[] bufferTypes = new Class[]{Poision.class};
+    private Map<Directions, Image> snakeHeadImages = new HashMap<>();
+    private Map<Class, Image> bufferImages = new HashMap<>();
+
+    private boolean ableToSetDirection = true;
+    private int cycleCounter = 0;  // number of game cycles
+    private boolean inGame = true;
+    private Timer timer;
+    private Image snakeBodyImage;
 
     /**
      * Constructor for the Game
@@ -60,12 +54,14 @@ public class Game extends JPanel implements ActionListener {
      * Load/initiate necessary images
      */
     private void loadImages() {
-    	rightMouth = new ImageIcon("src/main/resources/rightmouth.png").getImage();
-    	leftMouth = new ImageIcon("src/main/resources/leftmouth.png").getImage();
-    	upMouth = new ImageIcon("src/main/resources/upmouth.png").getImage();
-    	downMouth = new ImageIcon("src/main/resources/downmouth.png").getImage();
-    	snakeImage = new ImageIcon("src/main/resources/snakeimage.png").getImage();
-    	appleImage = new ImageIcon("src/main/resources/apple.png").getImage();
+
+    	snakeBodyImage = new ImageIcon("src/main/resources/snakeimage.png").getImage();
+    	this.snakeHeadImages.put(Directions.NORTH, new ImageIcon("src/main/resources/upmouth.png").getImage());
+        this.snakeHeadImages.put(Directions.SOUTH, new ImageIcon("src/main/resources/downmouth.png").getImage());
+        this.snakeHeadImages.put(Directions.EAST, new ImageIcon("src/main/resources/rightmouth.png").getImage());
+        this.snakeHeadImages.put(Directions.WEST, new ImageIcon("src/main/resources/leftmouth.png").getImage());
+    	this.bufferImages.put(Apple.class, new ImageIcon("src/main/resources/apple.png").getImage());
+        this.bufferImages.put(Poision.class, new ImageIcon("src/main/resources/poision.png").getImage());
     }
 
     /**
@@ -74,10 +70,13 @@ public class Game extends JPanel implements ActionListener {
     private void initGame() {
     	this.snake = new Snake();
     	this.gameBar.updateScoreLabel(0);
-    	locateApple();
-        timer = new Timer(DELAY, this);
+    	buffers.clear();
+    	buffers.add(new Apple(this.getFreeTile()));
+    	timer = new Timer(DELAY, this);
         timer.start();
+
         inGame = true;
+        cycleCounter = 0;
         ableToSetDirection = true;
     }
 
@@ -85,7 +84,6 @@ public class Game extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         doDrawing(g);
     }
     
@@ -96,23 +94,18 @@ public class Game extends JPanel implements ActionListener {
     private void doDrawing(Graphics g) {
 
         if (inGame) {
-        	// draw apple
-            g.drawImage(appleImage, apple.x, apple.y, this);
-            
-            // draw snake
-         // draw head
+        	// draw buffers
+            for (Buffer b : buffers) {
+                g.drawImage(this.bufferImages.get(b.getClass()), b.x, b.y, this);
+            }
+            // draw snake head
         	Tile head = snake.getHead();
-        	switch (snake.getDirection()) {
-        	case EAST: g.drawImage(rightMouth, head.x, head.y, this); break;
-        	case WEST: g.drawImage(leftMouth, head.x, head.y, this); break;
-        	case NORTH: g.drawImage(upMouth, head.x, head.y, this); break;
-        	case SOUTH: g.drawImage(downMouth, head.x, head.y, this); break;
-        	}
-        	// draw body
+            g.drawImage(this.snakeHeadImages.get(snake.getDirection()), head.x, head.y, this);
+        	// draw snake body
         	Iterator<Tile> iter = snake.getBodyIterator();
         	while(iter.hasNext()) {
             	Tile tile = iter.next();
-            	g.drawImage(snakeImage, tile.x, tile.y, this);
+            	g.drawImage(snakeBodyImage, tile.x, tile.y, this);
             }
             Toolkit.getDefaultToolkit().sync();
             g.dispose();
@@ -168,25 +161,59 @@ public class Game extends JPanel implements ActionListener {
     }
 
     /**
-     * Check if snake eats an apple, if so locate a new apple.
+     * Check if snake eats any buffers, if it's an apple, replace a new apple, else remove.
      */
-    private void checkApple() {
+    private void checkBuffers() {
     	Tile head = snake.getHead();
-		if (head.x == apple.x && head.y == apple.y) {
-    		snake.gains((int) (Math.random() * 2) + 1);
-    		snake.addScore(APPLE_SCORE);
-    		this.gameBar.updateScoreLabel(snake.getScore());
-    		locateApple();
-    	}
+    	for (int i=0; i<buffers.size(); i++) {
+    	    Buffer b = buffers.get(i);
+    	    if (head.equals(b)) {
+    	        snake.addBuffer(b);
+                this.gameBar.updateScoreLabel(snake.getScore());
+                if (i == 0) locateApple();
+                else buffers.remove(i);
+            }
+        }
     }
-    
+
     /**
-     * Randomize new apple location that is not contains in the snake body
+     * Get an unoccupied Tile
+     *
+     * @return an unoccupied TIle
+     */
+    private Tile getFreeTile() {
+        Tile newTile;
+        while(true) {
+            newTile  = new Tile((((int) (Math.random() * (X_DOTS-1)) * Constants.DOT_SIZE)),(((int) (Math.random() * (Y_DOTS-1)) * Constants.DOT_SIZE)));
+            for (Tile t : buffers) {
+                if (t != null && t.equals(newTile)) continue;
+            }
+            if (snake.containsTile(newTile)) continue;
+            break;
+        }
+        return newTile;
+    }
+
+
+    /**
+     * Locate a new Apple
      */
     private void locateApple() {
-    	do {
-    		apple = new Tile((((int) (Math.random() * (X_DOTS-1)) * Constants.DOT_SIZE)),(((int) (Math.random() * (Y_DOTS-1)) * Constants.DOT_SIZE)));
-    	} while(snake.containsTile(apple)); 
+        this.buffers.set(0, new Apple(getFreeTile()));
+    }
+
+    /**
+     * Locate a buffer to buffers exclude Apple.
+     */
+    private void locateRandomBuffer() {
+        Tile newTile = getFreeTile();
+        int n = (int)((this.bufferTypes.length-1) * Math.random());
+        try {
+            Class bufferClass = Class.forName(this.bufferTypes[n].getName());
+            this.buffers.add((Buffer) bufferClass.getDeclaredConstructor(Tile.class).newInstance(newTile));
+        } catch (Exception e) {
+            System.out.println("Locate buffer failed.");
+        }
     }
 
     /**
@@ -195,7 +222,7 @@ public class Game extends JPanel implements ActionListener {
      */
     private void checkCollisions() {
     	Tile head = snake.getHead();
-		if (snake.checkCollision() || head.y >= Constants.GAME_HEIGHT || head.y < 0 || head.x >= Constants.GAME_WIDTH || head.x < 0) {
+		if (!snake.isAlive() || head.y >= Constants.GAME_HEIGHT || head.y < 0 || head.x >= Constants.GAME_WIDTH || head.x < 0) {
 			inGame = false;
 			timer.stop();
 		}
@@ -204,10 +231,14 @@ public class Game extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (inGame) {
-            checkApple();
+            checkBuffers();
             checkCollisions();
             snake.move();
             this.ableToSetDirection = true;
+            if (++cycleCounter%this.ADVANCED_BUFFER_CYCLE == 0) {
+                locateRandomBuffer();
+                cycleCounter = 1; // set cycleCounter back to 1 prevent over flow.
+            }
         }
         repaint();
     }

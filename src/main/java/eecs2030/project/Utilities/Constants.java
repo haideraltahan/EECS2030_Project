@@ -15,10 +15,10 @@ public final class Constants {
     public static final String DATABASE_MAIN_OBJECT = "Scores";
     public static final String DATABASE_ERROR_OBJECT = "Error";
 
-    public static final int HEIGHT = 642;
-    public static final int WIDTH = 572;
-    public static final int GAME_WIDTH = 400;
-    public static final int GAME_HEIGHT = 622;
+    public static final int HEIGHT = 625;
+    public static final int WIDTH = 800;
+    public static final int GAME_WIDTH = 600;
+    public static final int GAME_HEIGHT = 600;
     public static final int DOT_SIZE = 25;
 
     public static final String START_COMMAND = "start";

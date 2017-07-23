@@ -19,8 +19,8 @@ import java.awt.event.ActionListener;
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
 
-    private Box Leftbox;
-    private JPanel Rightbox;
+    private Box leftbox;
+    private JPanel rightbox;
     private Database database;
     private TableModel tableModel;
     private Box mainMenuBox;
@@ -30,7 +30,7 @@ public class Window extends JFrame implements ActionListener {
         super(Constants.GAME_TITLE);
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setMinimumSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
+        this.getContentPane().setLayout(new BorderLayout());
         this.setResizable(false);
 
         //Set the Main Window in the center of the Screen
@@ -41,13 +41,12 @@ public class Window extends JFrame implements ActionListener {
         screenLeftSide();
         screenRightSide();
         databaseSetUp();
-
         // <------ END SETUP FUNCTIONS --->
-
 
         this.pack();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+
     }
 
     /**
@@ -88,24 +87,23 @@ public class Window extends JFrame implements ActionListener {
 
     private void screenRightSide() {
         //Box Holder for the game
-        Rightbox = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        Rightbox.setBackground(Color.ORANGE);
-        Rightbox.setMinimumSize(new Dimension(Constants.GAME_WIDTH, Constants.HEIGHT));
+        rightbox = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        rightbox.setBackground(Color.ORANGE);
+        rightbox.setPreferredSize(new Dimension(Constants.GAME_WIDTH, Constants.HEIGHT));
         addMainMenu();
-        this.getContentPane().add(Rightbox,BorderLayout.CENTER);
+        this.getContentPane().add(rightbox,BorderLayout.CENTER);
     }
     
 
     private void screenLeftSide() {
-        Leftbox = Box.createVerticalBox();
-        Leftbox.setMinimumSize(new Dimension(200, 600));
+        leftbox = Box.createVerticalBox();
         tableModel = new TableModel();
         JTable table = new JTable();
         table.setModel(tableModel);
-        Leftbox.add(new JLabel(Constants.HIGHSCORES_LABEL));
-        Leftbox.add(table.getTableHeader());
-        Leftbox.add(table);
-        this.getContentPane().add(Leftbox,BorderLayout.BEFORE_LINE_BEGINS);
+        leftbox.add(new JLabel(Constants.HIGHSCORES_LABEL));
+        leftbox.add(table.getTableHeader());
+        leftbox.add(table);
+        this.getContentPane().add(leftbox,BorderLayout.WEST);
     }
 
     private void addMainMenu() {
@@ -155,7 +153,7 @@ public class Window extends JFrame implements ActionListener {
         mainMenuBox.add(Box.createVerticalStrut(Constants.VERTICAL_PADDING));
         mainMenuBox.add(btnQuit);
 
-        Rightbox.add(mainMenuBox);
+        rightbox.add(mainMenuBox);
     }
 
     @Override
@@ -165,12 +163,12 @@ public class Window extends JFrame implements ActionListener {
         switch (command) {
             case Constants.START_COMMAND:
                 mainMenuBox.setVisible(false);
-                Rightbox.grabFocus();
+                rightbox.grabFocus();
                 String name = this.playerNameTF.getText().trim();
                 GameStatusBar gameBar = new GameStatusBar(name);
                 Game newGame = new Game(name, gameBar);
-                Rightbox.add(gameBar);
-                Rightbox.add(newGame);
+                rightbox.add(gameBar);
+                rightbox.add(newGame);
                 newGame.requestFocus();
                 this.revalidate();
                 break;
