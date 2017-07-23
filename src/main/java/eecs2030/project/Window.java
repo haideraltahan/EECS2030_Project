@@ -91,9 +91,9 @@ public class Window extends JFrame implements ActionListener {
         rightbox.setBackground(Color.ORANGE);
         rightbox.setPreferredSize(new Dimension(Constants.GAME_WIDTH, Constants.HEIGHT));
         addMainMenu();
-        this.getContentPane().add(rightbox,BorderLayout.CENTER);
+        this.getContentPane().add(rightbox, BorderLayout.CENTER);
     }
-    
+
 
     private void screenLeftSide() {
         leftbox = Box.createVerticalBox();
@@ -103,14 +103,14 @@ public class Window extends JFrame implements ActionListener {
         leftbox.add(new JLabel(Constants.HIGHSCORES_LABEL));
         leftbox.add(table.getTableHeader());
         leftbox.add(table);
-        this.getContentPane().add(leftbox,BorderLayout.WEST);
+        this.getContentPane().add(leftbox, BorderLayout.WEST);
     }
 
     private void addMainMenu() {
-    	JLabel playerNameLabel = new JLabel(Constants.PLAYER_NAME_LABEL);
-    	this.playerNameTF = new JTextField("",20);
-    	
-    	JButton btnStart = new JButton(Constants.START_GAME_BUTTON);
+        JLabel playerNameLabel = new JLabel(Constants.PLAYER_NAME_LABEL);
+        this.playerNameTF = new JTextField("", 20);
+
+        JButton btnStart = new JButton(Constants.START_GAME_BUTTON);
         JButton btnQuit = new JButton(Constants.EXIT_GAME_BUTTON);
         btnStart.setEnabled(false);
 
@@ -122,29 +122,32 @@ public class Window extends JFrame implements ActionListener {
 
         btnStart.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnQuit.setAlignmentX(Component.CENTER_ALIGNMENT);
-    	
-    	// Listen for changes in the text
-    	this.playerNameTF.getDocument().addDocumentListener(new DocumentListener() {
-    	  public void changedUpdate(DocumentEvent e) {
-    	    warn();
-    	  }
-    	  public void removeUpdate(DocumentEvent e) {
-    	    warn();
-    	  }
-    	  public void insertUpdate(DocumentEvent e) {
-    	    warn();
-    	  }
-    	  public void warn() {
-    		  String playerName = playerNameTF.getText();
-    		  btnStart.setEnabled(playerName.length() > 0);
-    	  }
-    	});
 
-    	Box hBox = Box.createHorizontalBox();
-    	hBox.add(playerNameLabel);
-    	hBox.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING));
-    	hBox.add(this.playerNameTF);
-    	
+        // Listen for changes in the text
+        this.playerNameTF.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void warn() {
+                String playerName = playerNameTF.getText();
+                btnStart.setEnabled(playerName.length() > 0);
+            }
+        });
+
+        Box hBox = Box.createHorizontalBox();
+        hBox.add(playerNameLabel);
+        hBox.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING));
+        hBox.add(this.playerNameTF);
+
         mainMenuBox = Box.createVerticalBox();
         mainMenuBox.add(Box.createVerticalStrut(Constants.HEIGHT / 2));
         mainMenuBox.add(hBox);
