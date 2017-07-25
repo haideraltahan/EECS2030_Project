@@ -168,9 +168,7 @@ public class Window extends JFrame implements ActionListener {
                 mainMenuBox.setVisible(false);
                 rightbox.grabFocus();
                 String name = this.playerNameTF.getText().trim();
-                GameStatusBar gameBar = new GameStatusBar(name);
-                Game newGame = new Game(name, gameBar);
-                rightbox.add(gameBar);
+                GameController newGame = new GameController(name, rightbox);
                 rightbox.add(newGame);
                 newGame.requestFocus();
                 this.revalidate();

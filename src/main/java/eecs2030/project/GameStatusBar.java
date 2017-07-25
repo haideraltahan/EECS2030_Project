@@ -17,8 +17,9 @@ public class GameStatusBar extends JPanel {
 	private final JLabel scoreLabel = new JLabel("Score: 0");
 	
 	private final int BAR_HEIGHT = Constants.HEIGHT - Constants.GAME_HEIGHT;
+
 	/**
-     * Constructor for the Game
+     * Constructor
      */
     public GameStatusBar(String playerName) {
     	this.setFocusable(false);
@@ -32,8 +33,14 @@ public class GameStatusBar extends JPanel {
         this.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING*2));
         this.add(scoreLabel);
     }
-    
+
+    /**
+     * Update the score label
+     *
+     * @param score new score
+     */
     public void updateScoreLabel(int score) {
     	this.scoreLabel.setText("Score: " + score);
     }
+
 }

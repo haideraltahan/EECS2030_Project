@@ -43,4 +43,5 @@ public class Tile {
 	public String toString() {
 		return String.format("Tile x=%d y=%d",x,y);
 	}
+
 }
