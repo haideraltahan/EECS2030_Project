@@ -25,8 +25,8 @@ public class Snake {
 	
 	private int score = 0;
 	private boolean isAlive = true;
-	
-	/**
+
+    /**
 	 * Constructor
 	 */
 	public Snake() {
