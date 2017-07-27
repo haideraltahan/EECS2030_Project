@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import eecs2030.project.Enums.Directions;
-import eecs2030.project.Utilities.Constants.Directions;
 import eecs2030.project.Utilities.Constants;
 
 /**
