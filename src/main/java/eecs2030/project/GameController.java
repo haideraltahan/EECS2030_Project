@@ -1,5 +1,7 @@
 package eecs2030.project;
 
+import eecs2030.project.Enums.SpeedLevel;
+
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.event.*;
@@ -14,7 +16,8 @@ public class GameController extends JPanel implements ActionListener {
     private GameStatusBar gameStatusBar;
     private GameModel gameModel;
 
-    private final int DELAY = 140;  // delay for timer
+    private int speedUpLength = 20; // the snake length to upgrade the game difficulty level
+    private SpeedLevel speedLevel = SpeedLevel.SLOW;  // delay for timer
     private Timer timer;
 
 
@@ -30,20 +33,42 @@ public class GameController extends JPanel implements ActionListener {
         this.gameView = new GameView(this.gameModel);
         sender.add(this.gameStatusBar);
         sender.add(this.gameView);
-        timer = new Timer(DELAY, this);
+        resetTimer();
+    }
+
+    /**
+     * Reset the timer and start the timer
+     */
+    void resetTimer() {
+        if (this.timer != null) this.timer.stop();
+        this.timer = new Timer(this.speedLevel.getTimeInterval(), this);
         timer.start();
     }
 
-    void resetTimer() {
-        this.timer = new Timer(DELAY, this);
-        timer.start();
+    /**
+     * Speed up to next level.
+     */
+    private void speedUp() {
+        this.speedLevel = this.speedLevel.getNextLevel();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (this.gameModel.isInGame()) {
-            this.gameModel.prepareNextMove();
+            if (this.gameModel.getSnake().getLength() > speedUpLength) {
+                // Game upgrade the speed into next level
+                this.speedUp();
+                int score = this.gameModel.getSnake().getScore();
+                this.gameModel.initGame();
+                this.gameModel.getSnake().addScore(score);
+                this.gameStatusBar.updateScoreLabel(score);
+                resetTimer();
+            } else {
+                // Move the snake
+                this.gameModel.prepareNextMove();
+            }
         } else {
+            // Game over
             this.timer.stop();
             this.gameModel.saveScoreToDatabase();
         }
@@ -61,7 +86,6 @@ public class GameController extends JPanel implements ActionListener {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            System.out.println("Receive key");
             int key = e.getKeyCode();
             if (key == KeyEvent.VK_R) {
                 gameModel.initGame();
