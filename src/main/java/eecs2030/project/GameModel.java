@@ -3,6 +3,7 @@ package eecs2030.project;
 import eecs2030.project.Models.*;
 import eecs2030.project.Utilities.Constants;
 import eecs2030.project.Utilities.Database;
+import eecs2030.project.Enums.Directions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class GameModel {
 
     private Snake snake;
     private List<Buffer> buffers = new ArrayList<>();
-    private Class<?>[] bufferTypes = new Class[]{PoisonedApple.class};
+    private Class<?>[] bufferTypes = new Class[]{GoldenApple.class, PoisonedApple.class};
     private boolean ableToSetDirection = true;
     private int cycleCounter = 0;  // number of game cycles
     private boolean inGame = true;
@@ -82,7 +83,7 @@ public class GameModel {
      */
     private void locateRandomBuffer() {
         Tile newTile = getFreeTile();
-        int n = (int)((this.bufferTypes.length-1) * Math.random());
+        int n = Math.random() < 0.1 ? 0 : 1;
         try {
             Class bufferClass = Class.forName(this.bufferTypes[n].getName());
             if (this.buffers.size() == MAXIMUM_BUFFERS) this.buffers.remove(1);
@@ -153,8 +154,8 @@ public class GameModel {
     public void setDirection(int key) {
         if (inGame && ableToSetDirection) {
             try {
-                Constants.Directions direction = snake.getDirection();
-                Constants.Directions newDirection = Constants.Directions.getDirection(key);
+                Directions direction = snake.getDirection();
+                Directions newDirection = Directions.getDirection(key);
                 if (direction.getValue() % 2 != newDirection.getValue() % 2) {
                     snake.setDirection(newDirection);
                     ableToSetDirection = false;

@@ -1,6 +1,7 @@
 package eecs2030.project;
 
 import eecs2030.project.Models.*;
+import eecs2030.project.Enums.*;
 import eecs2030.project.Utilities.Constants;
 
 import javax.swing.*;
@@ -13,10 +14,9 @@ import java.util.*;
 public class GameView extends JPanel {
 
     private final GameModel model;
-    private Map<Constants.Directions, Image> snakeHeadImages = new HashMap<>();
+    private Map<Directions, Image> snakeHeadImages = new HashMap<>();
     private Map<Class, Image> bufferImages = new HashMap<>();
     private Image snakeBodyImage;
-
 
     public GameView(GameModel model) {
         this.model = model;
@@ -33,11 +33,12 @@ public class GameView extends JPanel {
     private void loadImages() {
 
         snakeBodyImage = new ImageIcon(getClass().getResource("snakeimage.png")).getImage();
-        this.snakeHeadImages.put(Constants.Directions.NORTH, new ImageIcon(getClass().getResource("upmouth.png")).getImage());
-        this.snakeHeadImages.put(Constants.Directions.SOUTH, new ImageIcon(getClass().getResource("downmouth.png")).getImage());
-        this.snakeHeadImages.put(Constants.Directions.EAST, new ImageIcon(getClass().getResource("rightmouth.png")).getImage());
-        this.snakeHeadImages.put(Constants.Directions.WEST, new ImageIcon(getClass().getResource("leftmouth.png")).getImage());
+        this.snakeHeadImages.put(Directions.NORTH, new ImageIcon(getClass().getResource("upmouth.png")).getImage());
+        this.snakeHeadImages.put(Directions.SOUTH, new ImageIcon(getClass().getResource("downmouth.png")).getImage());
+        this.snakeHeadImages.put(Directions.EAST, new ImageIcon(getClass().getResource("rightmouth.png")).getImage());
+        this.snakeHeadImages.put(Directions.WEST, new ImageIcon(getClass().getResource("leftmouth.png")).getImage());
         this.bufferImages.put(Apple.class, new ImageIcon(getClass().getResource("apple.png")).getImage());
+        this.bufferImages.put(GoldenApple.class, new ImageIcon(getClass().getResource("golden_apple.png")).getImage());
         this.bufferImages.put(PoisonedApple.class, new ImageIcon(getClass().getResource("poison.png")).getImage());
     }
 
