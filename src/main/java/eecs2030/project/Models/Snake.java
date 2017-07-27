@@ -3,7 +3,7 @@ package eecs2030.project.Models;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import eecs2030.project.Models.Tile;
+import eecs2030.project.Enums.Directions;
 import eecs2030.project.Utilities.Constants.Directions;
 import eecs2030.project.Utilities.Constants;
 
@@ -108,7 +108,13 @@ public class Snake {
     public int getScore() {
     	return this.score;
     }
-    
+
+    /**
+     * Get snake length
+     *
+     * @return  length of the snake
+     */
+    public int getLength() { return this.tiles.size(); }
     /**
      * Get snake body tiles iterator
      * 

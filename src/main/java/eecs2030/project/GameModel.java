@@ -15,6 +15,7 @@ public class GameModel {
     private final int X_DOTS = Constants.GAME_WIDTH / Constants.DOT_SIZE;
     private final int Y_DOTS = Constants.GAME_HEIGHT / Constants.DOT_SIZE;
     private final int ADVANCED_BUFFER_CYCLE = 50;  // number of cycles for an advanced buffer to be located
+    private final int MAXIMUM_BUFFERS = 5;  // number of maximum buffers that can be present on the board
     private final String playerName;
 
     private Snake snake;
@@ -84,6 +85,7 @@ public class GameModel {
         int n = (int)((this.bufferTypes.length-1) * Math.random());
         try {
             Class bufferClass = Class.forName(this.bufferTypes[n].getName());
+            if (this.buffers.size() == MAXIMUM_BUFFERS) this.buffers.remove(1);
             this.buffers.add((Buffer) bufferClass.getDeclaredConstructor(Tile.class).newInstance(newTile));
         } catch (Exception e) {
             System.out.println("Locate buffer failed.");
