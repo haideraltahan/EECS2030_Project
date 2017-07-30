@@ -8,6 +8,7 @@ import eecs2030.project.Models.TableModel;
 import eecs2030.project.Utilities.Constants;
 import eecs2030.project.Utilities.Database;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -15,11 +16,14 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
 
-    private Box leftbox;
+    private JPanel leftbox;
     private JPanel rightbox;
     private Database database;
     private TableModel tableModel;
@@ -36,6 +40,7 @@ public class Window extends JFrame implements ActionListener {
         //Set the Main Window in the center of the Screen
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        this.setIconImage(new ImageIcon(getClass().getResource("icon.png")).getImage());
 
         // <------ INITIAL SETUP FUNCTIONS ---->
         screenLeftSide();
@@ -96,13 +101,21 @@ public class Window extends JFrame implements ActionListener {
 
 
     private void screenLeftSide() {
-        leftbox = Box.createVerticalBox();
         tableModel = new TableModel();
         JTable table = new JTable();
         table.setModel(tableModel);
-        leftbox.add(new JLabel(Constants.HIGHSCORES_LABEL));
-        leftbox.add(table.getTableHeader());
-        leftbox.add(table);
+
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.add(table.getTableHeader(), BorderLayout.PAGE_START);
+        tablePanel.add(table, BorderLayout.CENTER);
+
+        ImageIcon image = new ImageIcon(getClass().getResource("logo.png"));
+        JLabel label = new JLabel("", image, JLabel.CENTER);
+
+        leftbox = new JPanel(new BorderLayout());
+        leftbox.add(new JLabel(Constants.HIGHSCORES_LABEL), BorderLayout.PAGE_START);
+        leftbox.add(tablePanel, BorderLayout.CENTER);
+        leftbox.add(label, BorderLayout.PAGE_END);
         this.getContentPane().add(leftbox, BorderLayout.WEST);
     }
 

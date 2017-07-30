@@ -8,7 +8,7 @@ package eecs2030.project.Utilities;
  */
 public final class Constants {
 
-    public static final String GAME_TITLE = "Snake Main";
+    public static final String GAME_TITLE = "Snake Game - EECS 2030 Project";
     public static final String VERSION = "v0.0.1";
     public static final String FIREBASE_FILE_PATH = "service-account.json";
     public static final String FIREBASE_LINK = "https://snakegame-2a153.firebaseio.com/";
