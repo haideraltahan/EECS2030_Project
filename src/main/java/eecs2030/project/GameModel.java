@@ -1,5 +1,6 @@
 package eecs2030.project;
 
+import eecs2030.project.Enums.Difficulty;
 import eecs2030.project.Models.*;
 import eecs2030.project.Utilities.Constants;
 import eecs2030.project.Utilities.Database;
@@ -16,8 +17,9 @@ public class GameModel {
     private final int X_DOTS = Constants.GAME_WIDTH / Constants.DOT_SIZE;
     private final int Y_DOTS = Constants.GAME_HEIGHT / Constants.DOT_SIZE;
     private final int ADVANCED_BUFFER_CYCLE = 50;  // number of cycles for an advanced buffer to be located
-    private final int MAXIMUM_BUFFERS = 5;  // number of maximum buffers that can be present on the board
+
     private final String playerName;
+    private int max_buffers;  // number of maximum buffers that can be present on the board
 
     private Snake snake;
     private List<Buffer> buffers = new ArrayList<>();
@@ -34,13 +36,15 @@ public class GameModel {
      */
     public GameModel(String playerName) {
         this.playerName = playerName;
-        initGame();
+        ;
+        initGame(Difficulty.SLOW.getMax_buffers());
     }
 
     /**
      * Initiate the game, reset fields
      */
-    public void initGame() {
+    public void initGame(int max_buffers) {
+        this.max_buffers = max_buffers;
         this.snake = new Snake();
         buffers.clear();
         buffers.add(new Apple(this.getFreeTile()));
@@ -86,7 +90,7 @@ public class GameModel {
         int n = Math.random() < 0.1 ? 0 : 1;
         try {
             Class bufferClass = Class.forName(this.bufferTypes[n].getName());
-            if (this.buffers.size() == MAXIMUM_BUFFERS) this.buffers.remove(1);
+            if (this.buffers.size() == max_buffers) this.buffers.remove(1);
             this.buffers.add((Buffer) bufferClass.getDeclaredConstructor(Tile.class).newInstance(newTile));
         } catch (Exception e) {
             System.out.println("Locate buffer failed.");
@@ -99,7 +103,7 @@ public class GameModel {
      */
     private void checkCollisions() {
         Tile head = snake.getHead();
-        if (!snake.isAlive() || head.y >= Constants.GAME_HEIGHT || head.y < 0 || head.x >= Constants.GAME_WIDTH || head.x < 0) {
+        if (!snake.isAlive() || head.getY() >= Constants.GAME_HEIGHT || head.getY() < 0 || head.getX() >= Constants.GAME_WIDTH || head.getX() < 0) {
             inGame = false;
         }
     }
@@ -184,15 +188,17 @@ public class GameModel {
     }
 
     /**
-     * Save the score to database
+     * Save the score to the real time database if the score is greater than zero.
+     *
      */
     public void saveScoreToDatabase() {
-        try {
-            Database.getInstance().addScore(new Score(this.playerName, this.getSnake().getScore()));
-        } catch (Exception e) {
-            System.out.println("Error to save score to Database: " + e.getMessage());
+        if (this.getSnake().getScore() > 0) {
+            try {
+                Database.getInstance().addScore(new Score(this.playerName, this.getSnake().getScore()));
+            } catch (Exception e) {
+                System.out.println("Error to save score to Database: " + e.getMessage());
+            }
         }
 
     }
-
 }

@@ -58,17 +58,17 @@ public class GameView extends JPanel {
         if (model.isInGame()) {
             // draw buffers
             for (Buffer b : model.getBuffers()) {
-                g.drawImage(this.bufferImages.get(b.getClass()), b.x, b.y, this);
+                g.drawImage(this.bufferImages.get(b.getClass()), b.getX(), b.getY(), this);
             }
             // draw snake head
             Snake s = model.getSnake();
             Tile head = s.getHead();
-            g.drawImage(this.snakeHeadImages.get(s.getDirection()), head.x, head.y, this);
+            g.drawImage(this.snakeHeadImages.get(s.getDirection()), head.getX(), head.getY(), this);
             // draw snake body
             Iterator<Tile> iter = s.getBodyIterator();
             while (iter.hasNext()) {
                 Tile tile = iter.next();
-                g.drawImage(snakeBodyImage, tile.x, tile.y, this);
+                g.drawImage(snakeBodyImage, tile.getX(), tile.getY(), this);
             }
             Toolkit.getDefaultToolkit().sync();
             g.dispose();

@@ -23,7 +23,7 @@ public final class GoldenApple extends Buffer {
      * @param t a Tile
      */
     public GoldenApple(Tile t) {
-        this(t.x, t.y);
+        this(t.getX(), t.getY());
     }
 
     /**

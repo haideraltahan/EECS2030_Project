@@ -49,10 +49,10 @@ public class Snake {
     		this.remainGains--;
     	}
     	switch (direction) {
-    	case WEST: newHead = new Tile(newHead.x-Constants.DOT_SIZE, newHead.y); break;
-    	case EAST: newHead = new Tile(newHead.x+Constants.DOT_SIZE, newHead.y); break;
-    	case NORTH: newHead = new Tile(newHead.x, newHead.y-Constants.DOT_SIZE); break;
-    	case SOUTH: newHead = new Tile(newHead.x, newHead.y+Constants.DOT_SIZE); break;
+    	case WEST: newHead = new Tile(newHead.getX()-Constants.DOT_SIZE, newHead.getY()); break;
+    	case EAST: newHead = new Tile(newHead.getX()+Constants.DOT_SIZE, newHead.getY()); break;
+    	case NORTH: newHead = new Tile(newHead.getX(), newHead.getY()-Constants.DOT_SIZE); break;
+    	case SOUTH: newHead = new Tile(newHead.getX(), newHead.getY()+Constants.DOT_SIZE); break;
     	}
     	tiles.addFirst(newHead);
     }

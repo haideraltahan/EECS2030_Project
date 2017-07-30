@@ -7,8 +7,8 @@ package eecs2030.project.Models;
  *
  */
 public class Tile {
-	public final int x;
-	public final int y;
+	private final int x;
+	private final int y;
 
 	/**
 	 * Constructor
@@ -44,4 +44,11 @@ public class Tile {
 		return String.format("Tile x=%d y=%d",x,y);
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
 }

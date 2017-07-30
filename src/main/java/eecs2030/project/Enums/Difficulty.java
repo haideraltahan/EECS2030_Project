@@ -5,19 +5,23 @@ package eecs2030.project.Enums;
  *
  * Created by Haider on 7/23/2017.
  */
-public enum SpeedLevel {
-    SLOW(140),
+public enum Difficulty {
+    SLOW(140, 35, 3),
 
-    MEDIUM(100),
+    MEDIUM(100, 40, 4),
 
-    FAST(60),
+    FAST(60, 45, 5),
 
-    EXTREME(20);
+    EXTREME(20, 50, 6);
 
     private int timeInterval;
+    private int levelLength;
+    private int max_buffers;
 
-    SpeedLevel(final int timeInterval) {
+    Difficulty(final int timeInterval, final int levelLength, final int max_buffers) {
         this.timeInterval = timeInterval;
+        this.levelLength = levelLength;
+        this.max_buffers = max_buffers;
     }
 
     /**
@@ -34,7 +38,7 @@ public enum SpeedLevel {
      *
      * @return next speed level
      */
-    public SpeedLevel getNextLevel() {
+    public Difficulty getNextLevel() {
         switch (this) {
             case SLOW: return MEDIUM;
             case MEDIUM: return FAST;
@@ -43,4 +47,11 @@ public enum SpeedLevel {
         }
     }
 
+    public int getLevelLength() {
+        return levelLength;
+    }
+
+    public int getMax_buffers() {
+        return max_buffers;
+    }
 }

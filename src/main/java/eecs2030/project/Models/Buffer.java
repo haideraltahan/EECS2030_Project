@@ -22,7 +22,7 @@ public abstract class Buffer extends Tile {
      * @param t a Tile
      */
     public Buffer(Tile t) {
-        this(t.x, t.y);
+        this(t.getX(), t.getY());
     }
 
     /**

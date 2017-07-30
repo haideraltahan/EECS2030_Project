@@ -21,7 +21,7 @@ public class PoisonedApple extends Buffer {
      * @param t a Tile
      */
     public PoisonedApple(Tile t) {
-        this(t.x, t.y);
+        this(t.getX(), t.getY());
     }
 
     /**

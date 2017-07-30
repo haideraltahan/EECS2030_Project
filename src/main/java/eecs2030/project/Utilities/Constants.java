@@ -37,4 +37,5 @@ public final class Constants {
     public static final String HIGHSCORES_LABEL = "TOP 20 SCORES";
     public static final String PLAYER_NAME_LABEL = "Player Name:";
 
+
 }
