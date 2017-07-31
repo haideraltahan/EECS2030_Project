@@ -3,6 +3,7 @@ package eecs2030.project.Models;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import eecs2030.project.Enums.Difficulty;
 import eecs2030.project.Enums.Directions;
 import eecs2030.project.Utilities.Constants;
 
@@ -170,8 +171,8 @@ public class Snake {
      *
      * @param b the buffer
      */
-    public void addBuffer(Buffer b) {
-        b.addTo(this);
+    public void addBuffer(Buffer b, Difficulty difficulty) {
+        b.addTo(this, difficulty);
     }
     
 }

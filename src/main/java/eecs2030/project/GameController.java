@@ -1,39 +1,46 @@
 package eecs2030.project;
 
 import eecs2030.project.Enums.Difficulty;
-import eecs2030.project.Utilities.Constants;
 
 import javax.swing.*;
-import javax.swing.Timer;
-import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * A game controller contains the 2 views and 1 model.
  */
 @SuppressWarnings("serial")
-public class GameController extends JPanel implements ActionListener {
+public class GameController extends JPanel implements ActionListener, Runnable{
 
     private GameView gameView;
     private GameStatusBar gameStatusBar;
     private GameModel gameModel;
 
-    private Difficulty speedLevel = Difficulty.SLOW;  // delay for timer
-    private int levelLength = Difficulty.SLOW.getLevelLength();  // the snake length to upgrade the game difficulty level
+    private Difficulty difficulty = Difficulty.SLOW;  // delay for timer
+    private int levelLength = difficulty.getLevelLength();  // the snake length to upgrade the game difficulty level
     private Timer timer;
 
 
     /**
      * Constructor
      * @param playerName the player name
-     * @param sender parent panel
+     *
      */
-    public GameController(String playerName, JPanel sender) {
+    public GameController(String playerName) {
+        super(new BorderLayout());
         addKeyListener(new TAdapter());
         this.gameModel = new GameModel(playerName);
         this.gameStatusBar = new GameStatusBar(playerName);
         this.gameView = new GameView(this.gameModel);
-        sender.add(this.gameStatusBar);
-        sender.add(this.gameView);
+    }
+
+    @Override
+    public void run() {
+        this.add(this.gameStatusBar,BorderLayout.PAGE_START);
+        this.add(this.gameView, BorderLayout.CENTER);
         resetTimer();
     }
 
@@ -42,7 +49,7 @@ public class GameController extends JPanel implements ActionListener {
      */
     void resetTimer() {
         if (this.timer != null) this.timer.stop();
-        this.timer = new Timer(this.speedLevel.getTimeInterval(), this);
+        this.timer = new Timer(this.difficulty.getTimeInterval(), this);
         timer.start();
     }
 
@@ -50,8 +57,8 @@ public class GameController extends JPanel implements ActionListener {
      * Speed up to next level.
      */
     private void speedUp() {
-        this.speedLevel = this.speedLevel.getNextLevel();
-        this.levelLength = this.speedLevel.getLevelLength();
+        this.difficulty = this.difficulty.getNextLevel();
+        this.levelLength = this.difficulty.getLevelLength();
     }
 
     @Override
@@ -61,7 +68,7 @@ public class GameController extends JPanel implements ActionListener {
                 // Game upgrade the speed into next level
                 this.speedUp();
                 int score = this.gameModel.getSnake().getScore();
-                this.gameModel.initGame(speedLevel.getMax_buffers());
+                this.gameModel.initGame(difficulty);
                 this.gameModel.getSnake().addScore(score);
                 this.gameStatusBar.updateScoreLabel(score);
                 resetTimer();
@@ -73,7 +80,7 @@ public class GameController extends JPanel implements ActionListener {
             // Game over
             this.timer.stop();
             this.gameModel.saveScoreToDatabase();
-            this.speedLevel = Difficulty.SLOW;
+            this.difficulty = Difficulty.SLOW;
             this.levelLength = Difficulty.SLOW.getLevelLength();
         }
         this.gameView.repaint();
@@ -92,7 +99,7 @@ public class GameController extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
             if (key == KeyEvent.VK_R) {
-                gameModel.initGame(speedLevel.getMax_buffers());
+                gameModel.initGame(difficulty);
                 resetTimer();
             }
             else if (key == KeyEvent.VK_Q) System.exit(0);

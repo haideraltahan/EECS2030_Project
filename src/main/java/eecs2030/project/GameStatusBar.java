@@ -15,8 +15,6 @@ public class GameStatusBar extends JPanel {
 	
 	private final JLabel playerNameLabel;
 	private final JLabel scoreLabel = new JLabel("Score: 0");
-	
-	private final int BAR_HEIGHT = Constants.HEIGHT - Constants.GAME_HEIGHT;
 
 	/**
      * Constructor
@@ -24,8 +22,8 @@ public class GameStatusBar extends JPanel {
     public GameStatusBar(String playerName) {
     	this.setFocusable(false);
         setBackground(Color.GRAY);
-        setPreferredSize(new Dimension(Constants.GAME_WIDTH, BAR_HEIGHT));
-        this.playerNameLabel = new JLabel("Player: " + playerName);
+        setPreferredSize(new Dimension(Constants.GAME_WIDTH, Constants.BAR_HEIGHT));
+        this.playerNameLabel = new JLabel( Constants.PLAYER_NAME_LABEL + playerName);
         this.playerNameLabel.setForeground(Color.white);
         this.scoreLabel.setForeground(Color.white);
         this.setLayout(new FlowLayout());

@@ -35,7 +35,17 @@ public final class Constants {
     public static final String START_GAME_BUTTON = "START GAME!";
     public static final String EXIT_GAME_BUTTON = "QUIT";
     public static final String HIGHSCORES_LABEL = "TOP 20 SCORES";
-    public static final String PLAYER_NAME_LABEL = "Player Name:";
+    public static final String PLAYER_NAME_LABEL = "Player Name: ";
 
+    //<-------- Game Cons. ----------->
+    public static final int GOLDENAPPLE_SCORE = 50;
+    public static final int APPLE_MIN_SCORE = 1;
+    public static final int APPLE_MAX_SCORE = 3;
+
+    // number of cycles for an advanced buffer to be located
+    public static final int ADVANCED_BUFFER_CYCLE = 50;
+    public static final int X_DOTS = Constants.GAME_WIDTH / Constants.DOT_SIZE;
+    public static final int Y_DOTS = Constants.GAME_HEIGHT / Constants.DOT_SIZE;
+    public static final int BAR_HEIGHT = Constants.HEIGHT - Constants.GAME_HEIGHT;
 
 }

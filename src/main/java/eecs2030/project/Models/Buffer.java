@@ -1,5 +1,7 @@
 package eecs2030.project.Models;
 
+import eecs2030.project.Enums.Difficulty;
+
 /**
  * A Buffer abstract class. It contains x,y coordinates.
  */
@@ -30,6 +32,6 @@ public abstract class Buffer extends Tile {
      *
      * @param snake the snake
      */
-    public abstract void addTo(Snake snake);
+    public abstract void addTo(Snake snake, Difficulty difficulty);
 
 }

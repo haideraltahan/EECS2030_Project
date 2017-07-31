@@ -1,5 +1,8 @@
 package eecs2030.project.Models;
 
+import eecs2030.project.Enums.Difficulty;
+import eecs2030.project.Utilities.Constants;
+
 /**
  * GoldenApple
  * a type of Buffer.
@@ -33,8 +36,9 @@ public final class GoldenApple extends Buffer {
      * @param snake
      */
     @Override
-    public void addTo(Snake snake) {
-        snake.addScore(50);
+    public void addTo(Snake snake, Difficulty difficulty) {
+        snake.addScore(Constants.GOLDENAPPLE_SCORE * difficulty.getScore_multiplier());
+        snake.gains(difficulty.getScore_multiplier() * 2);
     }
 
     @Override

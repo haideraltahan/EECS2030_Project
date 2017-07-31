@@ -14,12 +14,8 @@ import java.util.List;
  */
 public class GameModel {
 
-    private final int X_DOTS = Constants.GAME_WIDTH / Constants.DOT_SIZE;
-    private final int Y_DOTS = Constants.GAME_HEIGHT / Constants.DOT_SIZE;
-    private final int ADVANCED_BUFFER_CYCLE = 50;  // number of cycles for an advanced buffer to be located
-
     private final String playerName;
-    private int max_buffers;  // number of maximum buffers that can be present on the board
+    private Difficulty difficulty;  // number of maximum buffers that can be present on the board
 
     private Snake snake;
     private List<Buffer> buffers = new ArrayList<>();
@@ -37,14 +33,14 @@ public class GameModel {
     public GameModel(String playerName) {
         this.playerName = playerName;
         ;
-        initGame(Difficulty.SLOW.getMax_buffers());
+        initGame(Difficulty.SLOW);
     }
 
     /**
      * Initiate the game, reset fields
      */
-    public void initGame(int max_buffers) {
-        this.max_buffers = max_buffers;
+    public void initGame(Difficulty difficulty) {
+        this.difficulty = difficulty;
         this.snake = new Snake();
         buffers.clear();
         buffers.add(new Apple(this.getFreeTile()));
@@ -62,7 +58,7 @@ public class GameModel {
         Tile newTile;
         boolean invalid = true;
         do {
-            newTile  = new Tile((((int) (Math.random() * (X_DOTS-1)) * Constants.DOT_SIZE)),(((int) (Math.random() * (Y_DOTS-1)) * Constants.DOT_SIZE)));
+            newTile  = new Tile((((int) (Math.random() * (Constants.X_DOTS-1)) * Constants.DOT_SIZE)),(((int) (Math.random() * (Constants.Y_DOTS-1)) * Constants.DOT_SIZE)));
             if (snake.containsTile(newTile)) continue;
             invalid = false;
             for (Tile t : buffers) {
@@ -90,7 +86,7 @@ public class GameModel {
         int n = Math.random() < 0.1 ? 0 : 1;
         try {
             Class bufferClass = Class.forName(this.bufferTypes[n].getName());
-            if (this.buffers.size() == max_buffers) this.buffers.remove(1);
+            if (this.buffers.size() == this.difficulty.getMax_buffers()) this.buffers.remove(1);
             this.buffers.add((Buffer) bufferClass.getDeclaredConstructor(Tile.class).newInstance(newTile));
         } catch (Exception e) {
             System.out.println("Locate buffer failed.");
@@ -116,7 +112,7 @@ public class GameModel {
     	for (int i=0; i<buffers.size(); i++) {
     	    Buffer b = buffers.get(i);
     	    if (head.equals(b)) {
-    	        snake.addBuffer(b);
+    	        snake.addBuffer(b, difficulty);
                 if (i == 0) locateApple();
                 else buffers.remove(i);
             }
@@ -141,7 +137,7 @@ public class GameModel {
             checkCollisions();
             snake.move();
             this.ableToSetDirection = true;
-            if (++cycleCounter%this.ADVANCED_BUFFER_CYCLE == 0) {
+            if (++cycleCounter%Constants.ADVANCED_BUFFER_CYCLE == 0) {
                 locateRandomBuffer();
                 cycleCounter = 1; // set cycleCounter back to 1 prevent over flow.
             }

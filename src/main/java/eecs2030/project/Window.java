@@ -8,17 +8,12 @@ import eecs2030.project.Models.TableModel;
 import eecs2030.project.Utilities.Constants;
 import eecs2030.project.Utilities.Database;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
@@ -92,7 +87,7 @@ public class Window extends JFrame implements ActionListener {
 
     private void screenRightSide() {
         //Box Holder for the game
-        rightbox = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        rightbox = new JPanel(new BorderLayout());
         rightbox.setBackground(Color.ORANGE);
         rightbox.setPreferredSize(new Dimension(Constants.GAME_WIDTH, Constants.HEIGHT));
         addMainMenu();
@@ -150,26 +145,30 @@ public class Window extends JFrame implements ActionListener {
                 warn();
             }
 
-            public void warn() {
+            private void warn() {
                 String playerName = playerNameTF.getText();
                 btnStart.setEnabled(playerName.length() > 0);
             }
         });
 
         Box hBox = Box.createHorizontalBox();
+        hBox.add(Box.createHorizontalStrut(100));
         hBox.add(playerNameLabel);
         hBox.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING));
         hBox.add(this.playerNameTF);
+        hBox.add(Box.createHorizontalStrut(100));
+
 
         mainMenuBox = Box.createVerticalBox();
-        mainMenuBox.add(Box.createVerticalStrut(Constants.HEIGHT / 2));
+        mainMenuBox.add(Box.createVerticalStrut((int) (Constants.HEIGHT/2.5)));
         mainMenuBox.add(hBox);
         mainMenuBox.add(Box.createVerticalStrut(Constants.VERTICAL_PADDING));
         mainMenuBox.add(btnStart);
         mainMenuBox.add(Box.createVerticalStrut(Constants.VERTICAL_PADDING));
         mainMenuBox.add(btnQuit);
+        mainMenuBox.add(Box.createVerticalStrut(Constants.HEIGHT));
 
-        rightbox.add(mainMenuBox);
+        rightbox.add(mainMenuBox, BorderLayout.CENTER);
     }
 
     @Override
@@ -181,8 +180,9 @@ public class Window extends JFrame implements ActionListener {
                 mainMenuBox.setVisible(false);
                 rightbox.grabFocus();
                 String name = this.playerNameTF.getText().trim();
-                GameController newGame = new GameController(name, rightbox);
-                rightbox.add(newGame);
+                GameController newGame = new GameController(name);
+                rightbox.add(newGame, BorderLayout.CENTER);
+                new Thread(newGame).start();
                 newGame.requestFocus();
                 this.revalidate();
                 break;

@@ -1,5 +1,8 @@
 package eecs2030.project.Models;
 
+import eecs2030.project.Enums.Difficulty;
+import eecs2030.project.Utilities.Constants;
+
 /**
  * Apple, a type of Buffer.
  * Snake will gain 5 points when eats it.
@@ -32,10 +35,10 @@ public final class Apple extends Buffer {
      * @param snake
      */
     @Override
-    public void addTo(Snake snake) {
-        int n = (int) (Math.random() * 2) + 1;
-        snake.addScore(n);
-        snake.gains(n);
+    public void addTo(Snake snake, Difficulty difficulty) {
+        int n = (int) (Math.random() * Constants.APPLE_MAX_SCORE) + Constants.APPLE_MIN_SCORE;
+        snake.addScore(n * difficulty.getScore_multiplier());
+        snake.gains(difficulty.getScore_multiplier());
     }
 
     @Override

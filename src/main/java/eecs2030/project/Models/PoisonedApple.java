@@ -1,5 +1,7 @@
 package eecs2030.project.Models;
 
+import eecs2030.project.Enums.Difficulty;
+
 /**
  * PoisonedApple, a simple poision to kill a snake.
  */
@@ -31,7 +33,7 @@ public class PoisonedApple extends Buffer {
      * @param snake
      */
     @Override
-    public void addTo(Snake snake) {
+    public void addTo(Snake snake, Difficulty difficulty) {
         snake.setAlive(false);
     }
 
