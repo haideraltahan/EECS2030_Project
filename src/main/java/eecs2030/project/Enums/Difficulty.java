@@ -14,9 +14,9 @@ public enum Difficulty {
 
     EXTREME(20, 50, 6);
 
-    private int timeInterval;
-    private int levelLength;
-    private int max_buffers;
+    private final int timeInterval;
+    private final int levelLength;
+    private final int max_buffers;
 
     Difficulty(final int timeInterval, final int levelLength, final int max_buffers) {
         this.timeInterval = timeInterval;
