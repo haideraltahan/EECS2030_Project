@@ -10,6 +10,9 @@ import javax.swing.JPanel;
 
 import eecs2030.project.Utilities.Constants;
 
+/**
+ * A Game status bar view that shows the player name and current game score
+ */
 @SuppressWarnings("serial")
 public class GameStatusBar extends JPanel {
 	

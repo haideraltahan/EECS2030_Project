@@ -1,6 +1,9 @@
 package eecs2030.project;
 
 import eecs2030.project.Enums.Difficulty;
+import eecs2030.project.Models.GameModel;
+import eecs2030.project.GameStatusBar;
+import eecs2030.project.GameView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,14 +16,12 @@ import java.awt.event.KeyEvent;
  * A game controller contains the 2 views and 1 model.
  */
 @SuppressWarnings("serial")
-public class GameController extends JPanel implements ActionListener, Runnable{
+public final class GameController extends JPanel implements ActionListener, Runnable {
 
     private GameView gameView;
     private GameStatusBar gameStatusBar;
     private GameModel gameModel;
 
-    private Difficulty difficulty = Difficulty.SLOW;  // delay for timer
-    private int levelLength = difficulty.getLevelLength();  // the snake length to upgrade the game difficulty level
     private Timer timer;
 
 
@@ -49,39 +50,28 @@ public class GameController extends JPanel implements ActionListener, Runnable{
      */
     void resetTimer() {
         if (this.timer != null) this.timer.stop();
-        this.timer = new Timer(this.difficulty.getTimeInterval(), this);
+        this.timer = new Timer(this.gameModel.getDifficulty().getTimeInterval(), this);
         timer.start();
-    }
-
-    /**
-     * Speed up to next level.
-     */
-    private void speedUp() {
-        this.difficulty = this.difficulty.getNextLevel();
-        this.levelLength = this.difficulty.getLevelLength();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (this.gameModel.isInGame()) {
-            if (this.gameModel.getSnake().getLength() > levelLength) {
-                // Game upgrade the speed into next level
-                this.speedUp();
-                int score = this.gameModel.getSnake().getScore();
-                this.gameModel.initGame(difficulty);
-                this.gameModel.getSnake().addScore(score);
-                this.gameStatusBar.updateScoreLabel(score);
+            int score = this.gameModel.getSnake().getScore();
+            if (this.gameModel.ableToUpgradeDifficultyLevel()) {
+                // reset game with next difficulty level
+                this.gameModel.upgradeDifficultyLevel();
+                this.gameModel.initGame(score);
                 resetTimer();
             } else {
-                // Move the snake
                 this.gameModel.prepareNextMove();
             }
+            this.gameStatusBar.updateScoreLabel(score);
         } else {
             // Game over
             this.timer.stop();
             this.gameModel.saveScoreToDatabase();
-            this.difficulty = Difficulty.SLOW;
-            this.levelLength = Difficulty.SLOW.getLevelLength();
+            this.gameModel.setDifficulty(Difficulty.SLOW);
         }
         this.gameView.repaint();
         this.gameStatusBar.updateScoreLabel(this.gameModel.getSnake().getScore());
@@ -99,7 +89,7 @@ public class GameController extends JPanel implements ActionListener, Runnable{
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
             if (key == KeyEvent.VK_R) {
-                gameModel.initGame(difficulty);
+                gameModel.initGame(0);
                 resetTimer();
             }
             else if (key == KeyEvent.VK_Q) System.exit(0);

@@ -18,6 +18,11 @@ public class GameView extends JPanel {
     private Map<Class, Image> bufferImages = new HashMap<>();
     private Image snakeBodyImage;
 
+    /**
+     * Constructor
+     *
+     * @param model the game model instance
+     */
     public GameView(GameModel model) {
         this.model = model;
         setFocusable(true);
@@ -49,33 +54,40 @@ public class GameView extends JPanel {
     }
 
     /**
-     * Draw the apple and snake
+     * Draw the game based on current game state
      *
      * @param g The graphics
      */
     private void doDrawing(Graphics g) {
 
         if (model.isInGame()) {
-            // draw buffers
-            for (Buffer b : model.getBuffers()) {
-                g.drawImage(this.bufferImages.get(b.getClass()), b.getX(), b.getY(), this);
-            }
-            // draw snake head
-            Snake s = model.getSnake();
-            Tile head = s.getHead();
-            g.drawImage(this.snakeHeadImages.get(s.getDirection()), head.getX(), head.getY(), this);
-            // draw snake body
-            Iterator<Tile> iter = s.getBodyIterator();
-            while (iter.hasNext()) {
-                Tile tile = iter.next();
-                g.drawImage(snakeBodyImage, tile.getX(), tile.getY(), this);
-            }
-            Toolkit.getDefaultToolkit().sync();
-            g.dispose();
-
+            drawSnakeAndBuffers(g);
         } else {
-
             gameOver(g);
+        }
+        Toolkit.getDefaultToolkit().sync();
+        g.dispose();
+    }
+
+    /**
+     * Draw the apple and snake
+     *
+     * @param g The graphics
+     */
+    private void drawSnakeAndBuffers(Graphics g) {
+        // draw buffers
+        for (Buffer b : model.getBuffers()) {
+            g.drawImage(this.bufferImages.get(b.getClass()), b.getX(), b.getY(), this);
+        }
+        // draw snake head
+        Snake s = model.getSnake();
+        Tile head = s.getHead();
+        g.drawImage(this.snakeHeadImages.get(s.getDirection()), head.getX(), head.getY(), this);
+        // draw snake body
+        Iterator<Tile> iter = s.getBodyIterator();
+        while (iter.hasNext()) {
+            Tile tile = iter.next();
+            g.drawImage(snakeBodyImage, tile.getX(), tile.getY(), this);
         }
     }
 

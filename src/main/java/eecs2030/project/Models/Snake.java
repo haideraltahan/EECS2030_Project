@@ -30,13 +30,23 @@ public class Snake {
 	 * Constructor
 	 */
 	public Snake() {
-		direction = Directions.EAST;
-		length = 3;
-		int xOffsetUnits = 2; 
-		int yOffset = Constants.DOT_SIZE * 3;
-		for (int i=0; i<length; i++) 
-			tiles.add(new Tile(Constants.DOT_SIZE*(length-i-1 +xOffsetUnits), yOffset));
+		this(0);
 	}
+
+    /**
+     * Constructor with providing score
+     *
+     * @param score initial snake score
+     */
+	public Snake(int score) {
+	    this.score = score;
+        direction = Directions.EAST;
+        length = 3;
+        int xOffsetUnits = 2;
+        int yOffset = Constants.DOT_SIZE * 3;
+        for (int i=0; i<length; i++)
+            tiles.add(new Tile(Constants.DOT_SIZE*(length-i-1 +xOffsetUnits), yOffset));
+    }
     
     /**
      * Perform snake move, update snake's tiles to new locations
