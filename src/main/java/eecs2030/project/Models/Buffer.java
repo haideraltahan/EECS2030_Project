@@ -8,7 +8,7 @@ import eecs2030.project.Enums.Difficulty;
 public abstract class Buffer extends Tile {
 
     /**
-     * Constructor
+     * Constructora
      *
      * @param x x coordinate
      * @param y y coordinate
