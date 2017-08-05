@@ -1,4 +1,4 @@
-package eecs2030.project;
+package eecs2030.project.Models;
 
 import eecs2030.project.Enums.Difficulty;
 import eecs2030.project.Models.*;
@@ -15,7 +15,7 @@ import java.util.List;
 public class GameModel {
 
     private final String playerName;
-    private Difficulty difficulty;  // number of maximum buffers that can be present on the board
+    private Difficulty difficulty = Difficulty.SLOW;  // number of maximum buffers that can be present on the board
 
     private Snake snake;
     private List<Buffer> buffers = new ArrayList<>();
@@ -32,16 +32,16 @@ public class GameModel {
      */
     public GameModel(String playerName) {
         this.playerName = playerName;
-        ;
-        initGame(Difficulty.SLOW);
+        initGame(0);
     }
 
     /**
      * Initiate the game, reset fields
+     *
+     * @param score new game will use this score
      */
-    public void initGame(Difficulty difficulty) {
-        this.difficulty = difficulty;
-        this.snake = new Snake();
+    public void initGame(int score) {
+        this.snake = new Snake(score);
         buffers.clear();
         buffers.add(new Apple(this.getFreeTile()));
         inGame = true;
@@ -86,7 +86,7 @@ public class GameModel {
         int n = Math.random() < 0.1 ? 0 : 1;
         try {
             Class bufferClass = Class.forName(this.bufferTypes[n].getName());
-            if (this.buffers.size() == this.difficulty.getMax_buffers()) this.buffers.remove(1);
+            if (this.buffers.size() == this.difficulty.getMaxBuffers()) this.buffers.remove(1);
             this.buffers.add((Buffer) bufferClass.getDeclaredConstructor(Tile.class).newInstance(newTile));
         } catch (Exception e) {
             System.out.println("Locate buffer failed.");
@@ -167,12 +167,48 @@ public class GameModel {
     }
 
     /**
+     * Set game difficulty
+     *
+     * @param difficulty the new difficulty
+     */
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    /**
+     * Upgrade difficulty level
+     */
+    public void upgradeDifficultyLevel() {
+        if (ableToUpgradeDifficultyLevel()) {
+            this.setDifficulty(this.getDifficulty().getNextLevel());
+        }
+    }
+
+    /**
+     * Check if game is able to upgrade its difficulty level.
+     *
+     * @return true if able to upgrade difficulty level, false otherwise.
+     */
+    public boolean ableToUpgradeDifficultyLevel() {
+        return this.getSnake().getLength() >= this.getDifficulty().getLevelLength();
+    }
+
+    /**
      * Get the list of buffers
      *
      * @return list of buffers
      */
     public List<Buffer> getBuffers() {
         return this.buffers;
+    }
+
+    /**
+     * Get the current difficulty
+     *
+     * @return current difficulty
+     */
+    public Difficulty getDifficulty() {
+        return this.difficulty;
     }
 
     /**
@@ -185,7 +221,6 @@ public class GameModel {
 
     /**
      * Save the score to the real time database if the score is greater than zero.
-     *
      */
     public void saveScoreToDatabase() {
         if (this.getSnake().getScore() > 0) {

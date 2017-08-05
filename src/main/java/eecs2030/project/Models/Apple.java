@@ -5,7 +5,8 @@ import eecs2030.project.Utilities.Constants;
 
 /**
  * Apple, a type of Buffer.
- * Snake will gain 5 points when eats it.
+ * Snake will gain a random number of points (difficulty * its random apple score) and
+ * increase a number of tiles based on difficulty when eats it.
  */
 public final class Apple extends Buffer {
 
@@ -30,15 +31,16 @@ public final class Apple extends Buffer {
 
     /**
      * Add buffer to snake
-     * Snake will gain 5 points and increase 1-3 tiles
+     * Snake will gain a random number of points (difficulty * its random apple score) and increase a number of tiles based on difficulty
      *
-     * @param snake
+     * @param snake The snake that ate the apple
+     * @param difficulty current difficulty
      */
     @Override
     public void addTo(Snake snake, Difficulty difficulty) {
         int n = (int) (Math.random() * Constants.APPLE_MAX_SCORE) + Constants.APPLE_MIN_SCORE;
-        snake.addScore(n * difficulty.getScore_multiplier());
-        snake.gains(difficulty.getScore_multiplier());
+        snake.addScore(n * difficulty.getScoreMultiplier());
+        snake.gains(difficulty.getScoreMultiplier());
     }
 
     @Override

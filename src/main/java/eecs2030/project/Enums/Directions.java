@@ -1,6 +1,6 @@
 package eecs2030.project.Enums;
 
-import eecs2030.project.Utilities.DirectionException;
+import eecs2030.project.Exceptions.DirectionException;
 
 /**
  * A simple directions enum

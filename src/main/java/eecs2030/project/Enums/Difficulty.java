@@ -16,19 +16,18 @@ public enum Difficulty {
 
     private final int timeInterval;
     private final int levelLength;
-    private final int max_buffers;
-    private final int score_multiplier;
+    private final int maxBuffers;
+    private final int scoreMultiplier;
 
-    Difficulty(final int timeInterval, final int levelLength, final int max_buffers
-    , final int score_multiplier) {
+    Difficulty(final int timeInterval, final int levelLength, final int maxBuffers, final int scoreMultiplier) {
         this.timeInterval = timeInterval;
         this.levelLength = levelLength;
-        this.max_buffers = max_buffers;
-        this.score_multiplier = score_multiplier;
+        this.maxBuffers = maxBuffers;
+        this.scoreMultiplier = scoreMultiplier;
     }
 
-    public int getScore_multiplier() {
-        return score_multiplier;
+    public int getScoreMultiplier() {
+        return scoreMultiplier;
     }
 
     /**
@@ -58,7 +57,7 @@ public enum Difficulty {
         return levelLength;
     }
 
-    public int getMax_buffers() {
-        return max_buffers;
+    public int getMaxBuffers() {
+        return maxBuffers;
     }
 }

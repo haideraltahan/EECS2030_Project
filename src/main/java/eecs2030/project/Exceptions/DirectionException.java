@@ -1,4 +1,4 @@
-package eecs2030.project.Utilities;
+package eecs2030.project.Exceptions;
 
 /**
  * A direction exception when user gives invalid KeyCode for Directions enum

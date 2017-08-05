@@ -6,7 +6,7 @@ import eecs2030.project.Utilities.Constants;
 /**
  * GoldenApple
  * a type of Buffer.
- * Snake will gain 50 points when eats it.
+ * Snake will gain 50 points times current difficulty level and increase its length by 2 times of current difficulty level
  */
 public final class GoldenApple extends Buffer {
 
@@ -31,14 +31,15 @@ public final class GoldenApple extends Buffer {
 
     /**
      * Add buffer to snake
-     * Snake will gain 50 points
+     * Snake will gain 50 points times current difficulty level and increase its length by 2 times of current difficulty level
      *
-     * @param snake
+     * @param snake the snake ates the buffer
+     * @param difficulty current difficulty
      */
     @Override
     public void addTo(Snake snake, Difficulty difficulty) {
-        snake.addScore(Constants.GOLDENAPPLE_SCORE * difficulty.getScore_multiplier());
-        snake.gains(difficulty.getScore_multiplier() * 2);
+        snake.addScore(Constants.GOLDENAPPLE_SCORE * difficulty.getScoreMultiplier());
+        snake.gains(difficulty.getScoreMultiplier() * 2);
     }
 
     @Override
