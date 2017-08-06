@@ -1,7 +1,6 @@
 package eecs2030.project.Models;
 
 import eecs2030.project.Enums.Difficulty;
-import eecs2030.project.Models.*;
 import eecs2030.project.Utilities.Constants;
 import eecs2030.project.Utilities.Database;
 import eecs2030.project.Enums.Directions;
@@ -190,7 +189,7 @@ public class GameModel {
      * @return true if able to upgrade difficulty level, false otherwise.
      */
     public boolean ableToUpgradeDifficultyLevel() {
-        return this.getSnake().getLength() >= this.getDifficulty().getLevelLength();
+        return this.getSnake().getStarterLength() >= this.getDifficulty().getLevelLength();
     }
 
     /**

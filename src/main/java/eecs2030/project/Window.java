@@ -15,6 +15,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * This class is responsible in initializing the main Window Visual Aspect as well as the high score table.
+ */
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
 

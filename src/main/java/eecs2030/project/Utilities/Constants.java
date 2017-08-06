@@ -26,9 +26,8 @@ public final class Constants {
 
     public static final int HORIZONTAL_PADDING = 10;
     public static final int VERTICAL_PADDING = 25;
-
-    public static final String HIGHSCORES_HEADER_NAME = "Player Name";
-    public static final String HIGHSCORES_HEADER_POINTS = "Points";
+    
+    public static final String[] HIGHSCORES_HEADERS = {"Player Name", "Points"};
 
 
     //<----- Labels ------->
@@ -41,6 +40,8 @@ public final class Constants {
     public static final int GOLDENAPPLE_SCORE = 50;
     public static final int APPLE_MIN_SCORE = 1;
     public static final int APPLE_MAX_SCORE = 3;
+    public static final int START_SNAKE_LENGTH = 3;
+    public static final int LOADING_TIME = 10;
 
     // number of cycles for an advanced buffer to be located
     public static final int ADVANCED_BUFFER_CYCLE = 50;

@@ -18,9 +18,9 @@ public class Snake {
 	private final LinkedList<Tile> tiles = new LinkedList<Tile>();
 	// Snake moving direction
 	private Directions direction = Directions.EAST;
-	// Snake length
-	private int length = 3;
-	// Snake remaining gains (if greater than 0, every movement, snake length will increase by 1)
+	// Snake starterLength
+	private int starterLength = Constants.START_SNAKE_LENGTH;
+	// Snake remaining gains (if greater than 0, every movement, snake starterLength will increase by 1)
 	private int remainGains = 0;
 	
 	private int score = 0;
@@ -41,11 +41,11 @@ public class Snake {
 	public Snake(int score) {
 	    this.score = score;
         direction = Directions.EAST;
-        length = 3;
+        starterLength = 3;
         int xOffsetUnits = 2;
         int yOffset = Constants.DOT_SIZE * 3;
-        for (int i=0; i<length; i++)
-            tiles.add(new Tile(Constants.DOT_SIZE*(length-i-1 +xOffsetUnits), yOffset));
+        for (int i = 0; i< starterLength; i++)
+            tiles.add(new Tile(Constants.DOT_SIZE*(starterLength -i-1 +xOffsetUnits), yOffset));
     }
     
     /**
@@ -111,7 +111,7 @@ public class Snake {
     }
     
     /**
-     * Get snake score (length + remaining gains)
+     * Get snake score (starterLength + remaining gains)
      * 
      * @return snake score
      */
@@ -120,11 +120,11 @@ public class Snake {
     }
 
     /**
-     * Get snake length
+     * Get snake starterLength
      *
-     * @return  length of the snake
+     * @return  starterLength of the snake
      */
-    public int getLength() { return this.tiles.size(); }
+    public int getStarterLength() { return this.tiles.size(); }
     /**
      * Get snake body tiles iterator
      * 

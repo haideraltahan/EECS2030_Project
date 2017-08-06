@@ -44,10 +44,20 @@ public class Tile {
 		return String.format("Tile x=%d y=%d",x,y);
 	}
 
+	/**
+	 * Get the x coordinate of the tile
+	 *
+	 * @return the x coordinate of the tile
+	 */
 	public int getX() {
 		return x;
 	}
 
+	/**
+	 * Get the y coordinate of the tile
+	 *
+	 * @return the y coordinate of the tile
+	 */
 	public int getY() {
 		return y;
 	}
