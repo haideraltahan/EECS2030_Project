@@ -77,7 +77,6 @@ public class GameView extends JPanel {
      */
     public void drawLevelUpMessage(Difficulty difficulty) {
         Graphics g = this.getGraphics();
-        g.drawRect(0,0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         Font large = new Font("Helvetica", Font.BOLD, 32);
         g.setColor(Color.white);
         String msg = "Congratulations!";
