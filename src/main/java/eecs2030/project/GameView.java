@@ -1,5 +1,6 @@
 package eecs2030.project;
 
+import com.sun.tools.internal.jxc.ap.Const;
 import eecs2030.project.Models.*;
 import eecs2030.project.Enums.*;
 import eecs2030.project.Utilities.Constants;
@@ -70,6 +71,26 @@ public class GameView extends JPanel {
     }
 
     /**
+     * Draw Difficulty Level up Message
+     *
+     * @param difficulty new Difficulty
+     */
+    public void drawLevelUpMessage(Difficulty difficulty) {
+        Graphics g = this.getGraphics();
+        g.drawRect(0,0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
+        Font large = new Font("Helvetica", Font.BOLD, 32);
+        g.setColor(Color.white);
+        String msg = "Congratulations!";
+        g.setFont(large);
+        int y = Constants.GAME_HEIGHT / 2 - 50;
+        g.drawString(msg, this.calcMessageCenterPositionX(msg, large), y);
+
+        msg = "New Level: " + difficulty;
+        y = Constants.GAME_HEIGHT / 2;
+        g.drawString(msg, this.calcMessageCenterPositionX(msg, large), y);
+    }
+
+    /**
      * Draw the apple and snake
      *
      * @param g The graphics
@@ -90,6 +111,7 @@ public class GameView extends JPanel {
             g.drawImage(snakeBodyImage, tile.getX(), tile.getY(), this);
         }
     }
+
 
     /**
      * Game over. Screen shows game over, and instructions for restart and quit.
