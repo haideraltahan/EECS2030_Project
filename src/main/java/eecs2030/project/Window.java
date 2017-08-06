@@ -55,9 +55,8 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Creates a new database
      *
-     * @throws Exception
      */
-    private void databaseSetUp() throws Exception {
+    private void databaseSetUp() {
         this.database = Database.getInstance();
         DatabaseReference databaseRef = database.getDatabaseRef();
         databaseRef.orderByChild("points").limitToLast(20).addChildEventListener(new ChildEventListener() {
@@ -150,25 +149,33 @@ public class Window extends JFrame implements ActionListener {
 
             private void warn() {
                 String playerName = playerNameTF.getText();
-                btnStart.setEnabled(playerName.length() > 0);
+                btnStart.setEnabled((playerName != null) && playerName.matches("[a-zA-Z][A-Za-z0-9_]{2,17}"));
             }
         });
 
-        Box hBox = Box.createHorizontalBox();
-        hBox.add(Box.createHorizontalStrut(100));
-        hBox.add(playerNameLabel);
-        hBox.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING));
-        hBox.add(this.playerNameTF);
-        hBox.add(Box.createHorizontalStrut(100));
+        Box InputBox = Box.createHorizontalBox();
+        InputBox.add(Box.createHorizontalStrut(100));
+        InputBox.add(playerNameLabel);
+        InputBox.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING));
+        InputBox.add(this.playerNameTF);
+        InputBox.add(Box.createHorizontalStrut(100));
+
+        Box buttonsBox = Box.createHorizontalBox();
+        buttonsBox.add(btnStart);
+        buttonsBox.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING));
+        buttonsBox.add(btnQuit);
+
+        Box reqBox = Box.createHorizontalBox();
+        reqBox.add(Box.createHorizontalStrut(Constants.GAME_WIDTH/2 - 100));
+        reqBox.add(new Label("Name needs to be more than 3 characters long!"));
 
 
         mainMenuBox = Box.createVerticalBox();
         mainMenuBox.add(Box.createVerticalStrut((int) (Constants.HEIGHT/2.5)));
-        mainMenuBox.add(hBox);
+        mainMenuBox.add(InputBox);
+        mainMenuBox.add(reqBox);
         mainMenuBox.add(Box.createVerticalStrut(Constants.VERTICAL_PADDING));
-        mainMenuBox.add(btnStart);
-        mainMenuBox.add(Box.createVerticalStrut(Constants.VERTICAL_PADDING));
-        mainMenuBox.add(btnQuit);
+        mainMenuBox.add(buttonsBox);
         mainMenuBox.add(Box.createVerticalStrut(Constants.HEIGHT));
 
         rightbox.add(mainMenuBox, BorderLayout.CENTER);

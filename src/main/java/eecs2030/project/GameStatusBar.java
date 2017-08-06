@@ -8,6 +8,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import eecs2030.project.Enums.Difficulty;
 import eecs2030.project.Utilities.Constants;
 
 /**
@@ -18,18 +19,25 @@ public class GameStatusBar extends JPanel {
 	
 	private final JLabel playerNameLabel;
 	private final JLabel scoreLabel = new JLabel("Score: 0");
+	private final JLabel difficultyLabel;
 
 	/**
      * Constructor - Initialize the visuals for Player name and score.
+     *
+     * @param playerName Player Name that inputted
      */
     public GameStatusBar(String playerName) {
     	this.setFocusable(false);
         setBackground(Color.GRAY);
         setPreferredSize(new Dimension(Constants.GAME_WIDTH, Constants.BAR_HEIGHT));
         this.playerNameLabel = new JLabel( Constants.PLAYER_NAME_LABEL + playerName);
-        this.playerNameLabel.setForeground(Color.white);
-        this.scoreLabel.setForeground(Color.white);
+        this.playerNameLabel.setForeground(Color.WHITE);
+        this.scoreLabel.setForeground(Color.WHITE);
+        this.difficultyLabel = new JLabel("Difficulty: " + Difficulty.SLOW.toString());
+        this.difficultyLabel.setForeground(Color.WHITE);
         this.setLayout(new FlowLayout());
+        this.add(difficultyLabel);
+        this.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING*2));
         this.add(playerNameLabel);
         this.add(Box.createHorizontalStrut(Constants.HORIZONTAL_PADDING*2));
         this.add(scoreLabel);
@@ -40,8 +48,17 @@ public class GameStatusBar extends JPanel {
      *
      * @param score new score
      */
-    public void updateScoreLabel(int score) {
+    public void setScoreLabel(int score) {
     	this.scoreLabel.setText("Score: " + score);
+    }
+
+    /**
+     * Update the difficulty label
+     *
+     * @param difficulty new difficulty
+     */
+    public void setDifficultyLabel(Difficulty difficulty) {
+        this.difficultyLabel.setText("Difficulty: " + difficulty.toString());
     }
 
 }

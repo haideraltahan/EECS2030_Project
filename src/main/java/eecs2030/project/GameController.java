@@ -25,6 +25,16 @@ public final class GameController extends JPanel implements ActionListener, Runn
 
 
     /**
+     * Overridden method from Runnable interface to run the game on different Thread.
+     */
+    @Override
+    public void run() {
+        this.add(this.gameStatusBar, BorderLayout.PAGE_START);
+        this.add(this.gameView, BorderLayout.CENTER);
+        resetTimer();
+    }
+
+    /**
      * Constructor
      *
      * @param playerName the player name
@@ -35,16 +45,6 @@ public final class GameController extends JPanel implements ActionListener, Runn
         this.gameModel = new GameModel(playerName);
         this.gameStatusBar = new GameStatusBar(playerName);
         this.gameView = new GameView(this.gameModel);
-    }
-
-    /**
-     * Overridden method from Runnable interface to run the game on different Thread.
-     */
-    @Override
-    public void run() {
-        this.add(this.gameStatusBar, BorderLayout.PAGE_START);
-        this.add(this.gameView, BorderLayout.CENTER);
-        resetTimer();
     }
 
     /**
@@ -73,12 +73,13 @@ public final class GameController extends JPanel implements ActionListener, Runn
                 }
                 this.gameModel.upgradeDifficultyLevel();
                 this.gameModel.initGame(score);
+                this.gameStatusBar.setDifficultyLabel(this.gameModel.getDifficulty());
                 resetTimer();
 
             } else {
                 this.gameModel.prepareNextMove();
             }
-            this.gameStatusBar.updateScoreLabel(score);
+            this.gameStatusBar.setScoreLabel(score);
         } else {
             // Game over
             this.timer.stop();
@@ -86,7 +87,7 @@ public final class GameController extends JPanel implements ActionListener, Runn
             this.gameModel.setDifficulty(Difficulty.SLOW);
         }
         this.gameView.repaint();
-        this.gameStatusBar.updateScoreLabel(this.gameModel.getSnake().getScore());
+        this.gameStatusBar.setScoreLabel(this.gameModel.getSnake().getScore());
     }
 
     /**
@@ -99,11 +100,17 @@ public final class GameController extends JPanel implements ActionListener, Runn
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
-            if (key == KeyEvent.VK_R) {
-                gameModel.initGame(0);
-                resetTimer();
-            } else if (key == KeyEvent.VK_Q) System.exit(0);
-            else gameModel.setDirection(key);
+            switch (key){
+                case KeyEvent.VK_R:
+                    gameModel.initGame(0);
+                    resetTimer();
+                    break;
+                case KeyEvent.VK_Q:
+                    System.exit(0);
+                    break;
+                default:
+                    gameModel.setDirection(key);
+            }
         }
     }
 }
