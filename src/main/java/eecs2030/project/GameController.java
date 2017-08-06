@@ -2,8 +2,6 @@ package eecs2030.project;
 
 import eecs2030.project.Enums.Difficulty;
 import eecs2030.project.Models.GameModel;
-import eecs2030.project.GameStatusBar;
-import eecs2030.project.GameView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,9 +58,16 @@ public final class GameController extends JPanel implements ActionListener, Runn
             int score = this.gameModel.getSnake().getScore();
             if (this.gameModel.ableToUpgradeDifficultyLevel()) {
                 // reset game with next difficulty level
-                this.gameModel.upgradeDifficultyLevel();
-                this.gameModel.initGame(score);
-                resetTimer();
+                this.timer.stop();
+                this.gameView.drawLevelUpMessage(this.gameModel.getDifficulty());
+                try {
+                    Thread.sleep(3000);
+                    this.gameModel.upgradeDifficultyLevel();
+                    this.gameModel.initGame(score);
+                    resetTimer();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
             } else {
                 this.gameModel.prepareNextMove();
             }
