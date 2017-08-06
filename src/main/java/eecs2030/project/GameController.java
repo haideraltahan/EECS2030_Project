@@ -2,6 +2,7 @@ package eecs2030.project;
 
 import eecs2030.project.Enums.Difficulty;
 import eecs2030.project.Models.GameModel;
+import eecs2030.project.Utilities.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,8 +26,8 @@ public final class GameController extends JPanel implements ActionListener, Runn
 
     /**
      * Constructor
-     * @param playerName the player name
      *
+     * @param playerName the player name
      */
     public GameController(String playerName) {
         super(new BorderLayout());
@@ -36,9 +37,12 @@ public final class GameController extends JPanel implements ActionListener, Runn
         this.gameView = new GameView(this.gameModel);
     }
 
+    /**
+     * Overridden method from Runnable interface to run the game on different Thread.
+     */
     @Override
     public void run() {
-        this.add(this.gameStatusBar,BorderLayout.PAGE_START);
+        this.add(this.gameStatusBar, BorderLayout.PAGE_START);
         this.add(this.gameView, BorderLayout.CENTER);
         resetTimer();
     }
@@ -59,15 +63,18 @@ public final class GameController extends JPanel implements ActionListener, Runn
             if (this.gameModel.ableToUpgradeDifficultyLevel()) {
                 // reset game with next difficulty level
                 this.timer.stop();
-                this.gameView.drawLevelUpMessage(this.gameModel.getDifficulty());
-                try {
-                    Thread.sleep(3000);
-                    this.gameModel.upgradeDifficultyLevel();
-                    this.gameModel.initGame(score);
-                    resetTimer();
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
+                for (int i = Constants.LOADING_TIME; i > 0; i--) {
+                    this.gameView.drawLevelUpMessage(this.gameModel.getDifficulty(), i);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
                 }
+                this.gameModel.upgradeDifficultyLevel();
+                this.gameModel.initGame(score);
+                resetTimer();
+
             } else {
                 this.gameModel.prepareNextMove();
             }
@@ -84,9 +91,8 @@ public final class GameController extends JPanel implements ActionListener, Runn
 
     /**
      * TAdapter manage all necessary keys operations for Game
-     * 
-     * @author jianxiongwang
      *
+     * @author jianxiongwang
      */
     private class TAdapter extends KeyAdapter {
 
@@ -96,8 +102,7 @@ public final class GameController extends JPanel implements ActionListener, Runn
             if (key == KeyEvent.VK_R) {
                 gameModel.initGame(0);
                 resetTimer();
-            }
-            else if (key == KeyEvent.VK_Q) System.exit(0);
+            } else if (key == KeyEvent.VK_Q) System.exit(0);
             else gameModel.setDirection(key);
         }
     }

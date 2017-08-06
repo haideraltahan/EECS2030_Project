@@ -8,17 +8,20 @@ package eecs2030.project.Enums;
 public enum Difficulty {
     SLOW(140, 35, 3, 1),
 
-    MEDIUM(100, 40, 4, 2),
+    MEDIUM(100, 45, 4, 2),
 
-    FAST(60, 45, 5, 3),
+    FAST(60, 55, 5, 3),
 
-    EXTREME(20, 50, 6, 4);
+    EXTREME(20, 65, 6, 4);
 
     private final int timeInterval;
     private final int levelLength;
     private final int maxBuffers;
     private final int scoreMultiplier;
 
+    /**
+     * Enum Constructor
+     */
     Difficulty(final int timeInterval, final int levelLength, final int maxBuffers, final int scoreMultiplier) {
         this.timeInterval = timeInterval;
         this.levelLength = levelLength;
@@ -26,6 +29,11 @@ public enum Difficulty {
         this.scoreMultiplier = scoreMultiplier;
     }
 
+    /**
+     * Get the Amount that the score will be multiplied depending on the difficulty
+     *
+     * @return the Amount that the score will be multiplied depending on the difficulty
+     */
     public int getScoreMultiplier() {
         return scoreMultiplier;
     }
@@ -53,10 +61,20 @@ public enum Difficulty {
         }
     }
 
+    /**
+     * Get the Snake length for the next Level
+     *
+     * @return Snake length for the next Level
+     */
     public int getLevelLength() {
         return levelLength;
     }
 
+    /**
+     * Get the maximum number of buffer in this difficulty.
+     *
+     * @return maximum number of buffer in this difficulty.
+     */
     public int getMaxBuffers() {
         return maxBuffers;
     }

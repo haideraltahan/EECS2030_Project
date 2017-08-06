@@ -20,7 +20,7 @@ public class GameStatusBar extends JPanel {
 	private final JLabel scoreLabel = new JLabel("Score: 0");
 
 	/**
-     * Constructor
+     * Constructor - Initialize the visuals for Player name and score.
      */
     public GameStatusBar(String playerName) {
     	this.setFocusable(false);

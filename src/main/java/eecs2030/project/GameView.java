@@ -1,6 +1,5 @@
 package eecs2030.project;
 
-import com.sun.tools.internal.jxc.ap.Const;
 import eecs2030.project.Models.*;
 import eecs2030.project.Enums.*;
 import eecs2030.project.Utilities.Constants;
@@ -74,18 +73,25 @@ public class GameView extends JPanel {
      * Draw Difficulty Level up Message
      *
      * @param difficulty new Difficulty
+     * @param seconds the number of seconds to display
      */
-    public void drawLevelUpMessage(Difficulty difficulty) {
+    public void drawLevelUpMessage(Difficulty difficulty, int seconds) {
         Graphics g = this.getGraphics();
+        g.setColor(Color.GRAY);
+        g.fillRect(0,0,Constants.GAME_WIDTH,Constants.GAME_HEIGHT);
         Font large = new Font("Helvetica", Font.BOLD, 32);
-        g.setColor(Color.white);
+        g.setColor(Color.WHITE);
         String msg = "Congratulations!";
         g.setFont(large);
         int y = Constants.GAME_HEIGHT / 2 - 50;
         g.drawString(msg, this.calcMessageCenterPositionX(msg, large), y);
 
-        msg = "New Level: " + difficulty;
+        msg = "New Level: " + difficulty.getNextLevel();
         y = Constants.GAME_HEIGHT / 2;
+        g.drawString(msg, this.calcMessageCenterPositionX(msg, large), y);
+
+        msg = "Loading in " + seconds + "s";
+        y = Constants.GAME_HEIGHT / 2 + 50;
         g.drawString(msg, this.calcMessageCenterPositionX(msg, large), y);
     }
 
