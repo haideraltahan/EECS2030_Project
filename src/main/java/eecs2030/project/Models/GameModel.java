@@ -40,12 +40,12 @@ public class GameModel {
      * @param score new game will use this score
      */
     public void initGame(int score) {
+        inGame = true;
+        ableToSetDirection = true;
+        cycleCounter = 0;
         this.snake = new Snake(score);
         buffers.clear();
         buffers.add(new Apple(this.getFreeTile()));
-        inGame = true;
-        cycleCounter = 0;
-        ableToSetDirection = true;
     }
 
     /**
@@ -121,6 +121,7 @@ public class GameModel {
 
     /**
      * Check if it's in Game or not
+     *
      * @return true if inGame false otherwise
      */
     public boolean isInGame() {
@@ -134,14 +135,13 @@ public class GameModel {
         if (this.isInGame()) {
             checkBuffers();
             checkCollisions();
+            if (!this.isInGame()) return;
             snake.move();
             this.ableToSetDirection = true;
-            if (++cycleCounter%Constants.ADVANCED_BUFFER_CYCLE == 0) {
+            if (++cycleCounter % Constants.ADVANCED_BUFFER_CYCLE == 0) {
                 locateRandomBuffer();
                 cycleCounter = 1; // set cycleCounter back to 1 prevent over flow.
             }
-        } else {
-
         }
     }
 
@@ -212,6 +212,7 @@ public class GameModel {
 
     /**
      * Get the snake
+     *
      * @return the snake
      */
     public Snake getSnake() {

@@ -16,7 +16,7 @@ import java.io.IOException;
  *
  * This class handles setting the HighScore Values to a RealTimeDateBase!
  */
-public final class Database{
+public final class Database {
 
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
@@ -66,7 +66,7 @@ public final class Database{
      *
      * @param score the score of the player
      */
-    public void addScore(Score score){
+    public void addScore(Score score) {
         this.databaseRef.push().setValue(score);
     }
 

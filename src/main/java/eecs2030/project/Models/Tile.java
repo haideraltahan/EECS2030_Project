@@ -1,5 +1,7 @@
 package eecs2030.project.Models;
 
+import java.util.Objects;
+
 /**
  * Tile is a dot with coordinates on the game board. Immutable class object.
  * 
@@ -38,7 +40,12 @@ public class Tile {
 		Tile other = (Tile) obj;
 		return this.x == other.x && this.y == other.y;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.getX(), this.getY());
+	}
+
 	@Override
 	public String toString() {
 		return String.format("Tile x=%d y=%d",x,y);
