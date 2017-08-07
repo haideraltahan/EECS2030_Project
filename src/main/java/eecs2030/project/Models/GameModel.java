@@ -41,7 +41,7 @@ public class GameModel {
      */
     public void initGame(int score) {
         inGame = true;
-        ableToSetDirection = true;
+        ableToSetDirection = false;
         cycleCounter = 0;
         this.snake = new Snake(score);
         buffers.clear();

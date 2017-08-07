@@ -29,8 +29,8 @@ public final class GameController extends JPanel implements ActionListener, Runn
      */
     @Override
     public void run() {
-        this.add(this.gameStatusBar, BorderLayout.PAGE_START);
-        this.add(this.gameView, BorderLayout.CENTER);
+//        this.add(this.gameStatusBar, BorderLayout.PAGE_START);
+//        this.add(this.gameView, BorderLayout.CENTER);
         resetTimer();
     }
 
@@ -45,6 +45,8 @@ public final class GameController extends JPanel implements ActionListener, Runn
         this.gameModel = new GameModel(playerName);
         this.gameStatusBar = new GameStatusBar(playerName);
         this.gameView = new GameView(this.gameModel);
+        this.add(this.gameStatusBar, BorderLayout.PAGE_START);
+        this.add(this.gameView, BorderLayout.CENTER);
     }
 
     /**
@@ -102,7 +104,9 @@ public final class GameController extends JPanel implements ActionListener, Runn
             int key = e.getKeyCode();
             switch (key){
                 case KeyEvent.VK_R:
+                    gameModel.setDifficulty(Difficulty.SLOW);
                     gameModel.initGame(0);
+                    gameStatusBar.setDifficultyLabel(gameModel.getDifficulty());
                     resetTimer();
                     break;
                 case KeyEvent.VK_Q:
