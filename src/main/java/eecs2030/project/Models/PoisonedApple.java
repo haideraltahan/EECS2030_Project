@@ -30,7 +30,8 @@ public class PoisonedApple extends Buffer {
      * Add buffer to snake
      * Snake will be killed and game over.
      *
-     * @param snake
+     * @param snake the snake
+     * @param difficulty current difficulty
      */
     @Override
     public void addTo(Snake snake, Difficulty difficulty) {

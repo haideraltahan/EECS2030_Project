@@ -182,6 +182,7 @@ public class Snake {
      * Add a buffer to snake
      *
      * @param b the buffer
+     * @param difficulty current difficulty
      */
     public void addBuffer(Buffer b, Difficulty difficulty) {
         b.addTo(this, difficulty);
