@@ -2,7 +2,9 @@ package eecs2030.project.Models;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Objects;
 
+import com.google.common.hash.HashCode;
 import eecs2030.project.Enums.Difficulty;
 import eecs2030.project.Enums.Directions;
 import eecs2030.project.Utilities.Constants;
@@ -184,5 +186,28 @@ public class Snake {
     public void addBuffer(Buffer b, Difficulty difficulty) {
         b.addTo(this, difficulty);
     }
-    
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        Snake other = (Snake) obj;
+        if (this.tiles.size() != other.tiles.size()
+                || this.direction != other.direction
+                || this.isAlive != other.isAlive
+                || this.remainGains != other.remainGains
+                || this.score != other.score) {
+            return false;
+        }
+        for (int i=0; i<this.tiles.size(); i++) {
+            if (!this.tiles.get(i).equals(other.tiles.get(i))) return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.direction.getValue(), this.isAlive, this.remainGains, this.score, this.tiles);
+    }
 }

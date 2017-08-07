@@ -265,6 +265,16 @@ public class SnakeTest {
 
     @Test
     public void addBuffer() throws Exception {
+        Snake snake = new Snake();
+        Buffer b = new Apple(0,0);
+        for (int i=0; i<50; i++) {
+            int n = snake.getScore();
+            snake.addBuffer(b, Difficulty.SLOW);
+            assertTrue(snake.getScore() > n && snake.getScore() < n+4);
+            n = snake.getScore();
+            snake.addBuffer(b, Difficulty.EXTREME);
+            assertTrue(snake.getScore() >= n+Difficulty.EXTREME.getScoreMultiplier() && snake.getScore() < n+Difficulty.EXTREME.getScoreMultiplier()*3+1);
+        }
     }
 
 }

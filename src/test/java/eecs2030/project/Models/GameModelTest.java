@@ -2,6 +2,8 @@ package eecs2030.project.Models;
 
 import eecs2030.project.Enums.Difficulty;
 import eecs2030.project.Enums.Directions;
+import eecs2030.project.Utilities.Constants;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -9,6 +11,16 @@ import static org.junit.Assert.*;
 public class GameModelTest {
     @Test
     public void initGame() throws Exception {
+        GameModel model = new GameModel("Player 1");
+        model.getSnake().addScore(50);
+        model.getSnake().gains(5);
+        model.setDirection(Directions.SOUTH.getValue());
+        model.setDifficulty(Difficulty.EXTREME);
+        model.initGame(300);
+        assertTrue(model.isInGame());
+        assertTrue(model.getBuffers().size() == 1);
+        assertTrue(model.getSnake().equals(new Snake(300)));
+        assertEquals(model.getDifficulty(), Difficulty.EXTREME);
     }
 
     @Test
@@ -19,30 +31,38 @@ public class GameModelTest {
 
     @Test
     public void prepareNextMove() throws Exception {
+        GameModel model = new GameModel("Player 1");
+        while (model.getSnake().getHead().getX() < Constants.GAME_WIDTH) {
+            assertTrue(model.isInGame());
+            model.prepareNextMove();
+        }
+        model.prepareNextMove();
+        assertFalse(model.isInGame());
+        assertEquals(model.getSnake().getHead().getX(), Constants.GAME_WIDTH);
     }
 
     @Test
     public void setdirection() throws Exception {
         GameModel model = new GameModel("Player 1");
-        double dir = Math.random()*4;
-        eecs2030.project.Enums.Directions expected = Directions.NORTH;
-        if (dir<=1&&dir>0){
-            model.setDirection(39);
-            expected = Directions.NORTH;
-        }
-        if (dir<=2&&dir>1){
-            model.setDirection(40);
-            expected = Directions.EAST;
-        }
-        if (dir<=3&&dir>2){
-            model.setDirection(41);
-            expected = Directions.SOUTH;
-        }
-        if (dir<=4&&dir>3){
-            model.setDirection(42);
-            expected = Directions.WEST;
-        }
-        assertEquals(expected, model.getSnake().getDirection());
+        model.prepareNextMove();
+        model.setDirection(40);
+        assertEquals(model.getSnake().getDirection(), Directions.SOUTH);
+        model.prepareNextMove();
+        model.setDirection(38);
+        assertEquals(model.getSnake().getDirection(), Directions.SOUTH);
+        model.setDirection(39);
+        assertEquals(model.getSnake().getDirection(), Directions.EAST);
+        model.prepareNextMove();
+        model.setDirection(38);
+        assertEquals(model.getSnake().getDirection(), Directions.NORTH);
+        model.prepareNextMove();
+        model.setDirection(37);
+        assertEquals(model.getSnake().getDirection(), Directions.WEST);
+        model.setDirection(40);
+        assertEquals(model.getSnake().getDirection(), Directions.WEST);
+        model.prepareNextMove();
+        model.setDirection(39);
+        assertEquals(model.getSnake().getDirection(), Directions.WEST);
     }
 
     @Test
@@ -69,14 +89,50 @@ public class GameModelTest {
 
     @Test
     public void upgradeDifficultyLevel() throws Exception {
+        GameModel model = new GameModel("Player 1");
+        model.upgradeDifficultyLevel();
+        assertEquals(Difficulty.SLOW, model.getDifficulty());
+        int n = Difficulty.SLOW.getLevelLength()-model.getSnake().getStarterLength();
+        model.getSnake().gains(n);
+        for (int i=0; i<n; i++) model.getSnake().move();
+        model.upgradeDifficultyLevel();
+        assertEquals(Difficulty.MEDIUM, model.getDifficulty());
+        n = Difficulty.MEDIUM.getLevelLength()-model.getSnake().getStarterLength();
+        model.getSnake().gains(n);
+        for (int i=0; i<n; i++) model.getSnake().move();
+        model.upgradeDifficultyLevel();
+        assertEquals(Difficulty.FAST, model.getDifficulty());
+        n = Difficulty.FAST.getLevelLength()-model.getSnake().getStarterLength();
+        model.getSnake().gains(n);
+        for (int i=0; i<n; i++) model.getSnake().move();
+        model.upgradeDifficultyLevel();
+        assertEquals(Difficulty.EXTREME, model.getDifficulty());
+        n = Difficulty.EXTREME.getLevelLength()-model.getSnake().getStarterLength();
+        model.getSnake().gains(n);
+        for (int i=0; i<n; i++) model.getSnake().move();
+        model.upgradeDifficultyLevel();
+        assertEquals(Difficulty.SLOW, model.getDifficulty());
     }
 
     @Test
     public void ableToUpgradeDifficultyLevel() throws Exception {
-    }
+        GameModel model = new GameModel("player 1");
+        int n = Difficulty.SLOW.getLevelLength();
+        while(model.getSnake().getStarterLength() < n) {
+            assertFalse(model.ableToUpgradeDifficultyLevel());
+            model.getSnake().gains(1);
+            model.getSnake().move();
+        }
+        assertTrue(model.ableToUpgradeDifficultyLevel());
 
-    @Test
-    public void getBuffers() throws Exception {
+        model.setDifficulty(Difficulty.EXTREME);
+        n = Difficulty.EXTREME.getLevelLength();
+        while(model.getSnake().getStarterLength() < n) {
+            assertFalse(model.ableToUpgradeDifficultyLevel());
+            model.getSnake().gains(1);
+            model.getSnake().move();
+        }
+        assertTrue(model.ableToUpgradeDifficultyLevel());
     }
 
     @Test
@@ -99,20 +155,6 @@ public class GameModelTest {
 
         model.setDifficulty(difficulty);
         assertEquals(difficulty, model.getDifficulty());
-    }
-
-    @Test
-    public void getSnake() throws Exception {
-        GameModel model = new GameModel("Player 1");
-        Snake expected = new Snake(0);
-        Snake actual = model.getSnake();
-
-        assertTrue(actual.equals(expected));
-    }
-
-    @Test
-    public void saveScoreToDatabase() throws Exception {
-        GameModel model = new GameModel("Player 1");
     }
 
 }
