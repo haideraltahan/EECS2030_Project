@@ -1,5 +1,8 @@
 package eecs2030.project.Models;
 
+/**
+ * A simple score object
+ */
 public final class Score implements Comparable<Score> {
 
     private final String name;

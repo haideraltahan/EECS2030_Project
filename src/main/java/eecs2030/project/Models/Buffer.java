@@ -31,6 +31,7 @@ public abstract class Buffer extends Tile {
      * Add this buffer to a snake.
      *
      * @param snake the snake
+     * @param difficulty current difficulty
      */
     public abstract void addTo(Snake snake, Difficulty difficulty);
 
